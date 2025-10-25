@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Profiles & Social</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 20px; background: #f9f9f9; }
+    h1 { text-align: center; }
+    form { background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 30px; }
+    input, textarea { width: 100%; padding: 8px; margin: 8px 0; box-sizing: border-box; }
+    button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    .profiles, .comments { background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 30px; }
+    .profile, .comment { border-bottom: 1px solid #ddd; padding: 10px 0; }
+    .profile:last-child, .comment:last-child { border-bottom: none; }
+    .profile-name { font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>User Profiles & Social Features</h1>
+
+  <!-- User Registration Form -->
+  <form id="profileForm">
+    <h2>Create Your Profile</h2>
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <textarea id="bio" placeholder="Short Bio" rows="3"></textarea>
+    <button type="submit">Create Profile</button>
+  </form>
+
+  <!-- Display User Profiles -->
+  <div class="profiles">
+    <h2>Profiles</h2>
+    <div id="profileList">
+      <p>No profiles yet.</p>
+    </div>
+  </div>
+
+  <!-- Comments Section -->
+  <div class="comments">
+    <h2>Leave a Comment</h2>
+    <form id="commentForm">
+      <input type="text" id="commentUser" placeholder="Your Username" required />
+      <textarea id="commentText" placeholder="Your Comment" rows="3" required></textarea>
+      <button type="submit">Post Comment</button>
+    </form>
+
+    <div id="commentList">
+      <p>No comments yet.</p>
+    </div>
+  </div>
+
+<script>
+  const profiles = [];
+  const comments = [];
+
+  const profileForm = document.getElementById('profileForm');
+  const profileList = document.getElementById('profileList');
+
+  const commentForm = document.getElementById('commentForm');
+  const commentList = document.getElementById('commentList');
+
+  profileForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const bio = document.getElementById('bio').value.trim();
+
+    if (!username || !email) return alert('Username and email are required.');
+
+    profiles.push({ username, email, bio });
+    displayProfiles();
+
+    profileForm.reset();
+  });
+
+  commentForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const commentUser = document.getElementById('commentUser').value.trim();
+    const commentText = document.getElementById('commentText').value.trim();
+
+    if (!commentUser || !commentText) return alert('Please enter username and comment.');
+
+    comments.push({ user: commentUser, text: commentText });
+    displayComments();
+
+    commentForm.reset();
+  });
+
+  function displayProfiles() {
+    if (profiles.length === 0) {
+      profileList.innerHTML = '<p>No profiles yet.</p>';
+      return;
+    }
+    profileList.innerHTML = profiles.map(p => `
+      <div class="profile">
+        <div class="profile-name">p.username</div>
+        <div><em>{p.email}</em></div>
+        <div>${p.bio || ''}</div>
+      </div>
+    `).join('');
+  }
+
+  function displayComments() {
+    if (comments.length === 0) {
+      commentList.innerHTML = '<p>No comments yet.</p>';
+      return;
+    }
+    <div class="comment">
+        <strong>{c.user}:</strong> ${c.text}
+      </div>
+    `).join('');
+  }
+</script>
+
+</body>
+</html>
