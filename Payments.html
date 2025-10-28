@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Page</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+    .container { max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; }
+    h2 { text-align: center; }
+    .payment-option { margin-bottom: 20px; }
+    button { width: 100%; padding: 12px; background: #007BFF; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    select, input { width: 100%; padding: 10px; margin-top: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; }
+    .note { font-size: 0.9em; color: #555; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Choose Payment Method</h2>
+
+    <!-- Mobile Money -->
+    <div class="payment-option">
+      <label>Mobile Money</label>
+      <select>
+        <option value="">Select Network</option>
+        <option value="mtn">MTN</option>
+        <option value="airtel">Airtel</option>
+        <option value="vodafone">Vodafone</option>
+      </select>
+      <input type="tel" placeholder="Enter Mobile Number">
+      <button>Pay with Mobile Money</button>
+    </div>
+
+    <!-- Card Payment -->
+    <div class="payment-option">
+      <label>Card Payment (Mastercard / Visa)</label>
+      <input type="text" placeholder="Card Number">
+      <input type="text" placeholder="Expiry Date (MM/YY)">
+      <input type="text" placeholder="CVV">
+      <button>Pay with Card</button>
+    </div>
+
+    <!-- Bank Transfer -->
+    <div class="payment-option">
+      <label>Bank Transfer</label>
+      <input type="text" placeholder="Bank Name">
+      <input type="text" placeholder="Account Number">
+      <button>Proceed with Bank Transfer</button>
+    </div>
+
+    <!-- PayPal -->
+    <div class="payment-option">
+      <label>PayPal</label>
+      <input type="email" placeholder="Enter PayPal Email">
+      <button>Pay with PayPal</button>
+    </div>
+
+    <!-- Apple Pay -->
+    <div class="payment-option">
+      <label>Apple Pay</label>
+      <p class="note">* Apple Pay will prompt automatically if supported by your browser/device.</p>
+      <button onclick="alert('Apple Pay integration required.')">Pay with Apple Pay</button>
+    </div>
+
+    <!-- Amazon Pay / Gift Card -->
+    <div class="payment-option">
+      <label>Amazon Gift Card</label>
+      <input type="text" placeholder="Enter Gift Card Code">
+      <button>Redeem Gift Card</button>
+    </div>
+
+    <!-- Other / Custom -->
+    <div class="payment-option">
+      <label>Other Payment Method</label>
+      <input type="text" placeholder="Specify Payment Type">
+      <input type="text" placeholder="Enter Details">
+      <button>Submit</button>
+    </div>
+  </div>
+
+</body>
+</html>
