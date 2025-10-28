@@ -1,0 +1,50 @@
+<body>
+<div style="padding: 10px; background: #f1f1f1;">
+  <input type="file" id="fileInput" />
+  <button onclick="uploadFile()">Upload</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-storage-compat.js"></script>
+
+<script>
+  const storage = firebase.storage();
+
+  function uploadFile() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    const user = document.getElementById("username").value || "Anonymous";
+    if (!file) return;
+
+    const fileRef = storage.ref('shared_files/' + Date.now() + "_" + file.name);
+    fileRef.put(file).then(snapshot => {
+      fileRef.getDownloadURL().then(url => {
+        messagesRef.push({
+          user: user,
+          fileUrl: url,
+          fileName: file.name,
+          time: Date.now()
+        });
+      });
+    });
+
+    fileInput.value = "";
+  }
+
+  // Update displayMessage to handle text or file
+  function displayMessage(data) {
+    const messagesDiv = document.getElementById("messages");
+    const msgElem = document.createElement("div");
+    msgElem.classList.add("message");
+
+    const time = new Date(data.time).toLocaleTimeString();
+    if (data.message) {
+      msgElem.innerHTML = `<strong>data.user</strong>:{data.message} <small style="color: gray;">(time)</small>`;
+     else if (data.fileUrl) 
+      msgElem.innerHTML = `<strong>{data.user}</strong> shared a file: <a href="data.fileUrl" target="_blank">{data.fileName}</a> <small style="color: gray;">(${time})</small>`;
+    }
+
+    messagesDiv.appendChild(msgElem);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+</script>
+  <a href="Home 1.html"></a>
