@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JBStudentHub Store</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: yello;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #3a003a;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    .store-container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 20px;
+      justify-content: center;
+    }
+    .item {
+      background: grey;
+      border: 1px solid #ccc;
+      margin: 10px;
+      padding: 15px;
+      width: 250px;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .item img {
+      max-width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    .item h3 {
+      margin: 10px 0 5px;
+    }
+    .item button {
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  
+
+<header>
+  <h1>JBStudentHub Store</h1>
+  <p>Buy & Sell Student Essentials</p>
+  <h2>Buy Products</h2>
+</header>
+  <header>
+ <h2>Available Items</h2>
+  </header>
+<div class="store-container">
+  <div class="item">
+    <img src="JB.jpg" alt="Item 1">
+    <h3>JB Adverts</h3>
+    <p></p>
+    <button><a href="Order page.html">View</a></button>
+  </div>
+
+  <div class="item">
+    <img src="item2.jpg" alt="Item 2">
+    <h3>Book Shop</h3>
+    <p></p>
+    <button><a href="Order page.html">View</a></button>
+  </div>
+
+  <div class="item">
+    <img src="JB 4.jpg" alt="Item 3">
+    <h3>Pablo Barber</h3>
+    <p> </p>
+    <button><a href="Order page.html">View</a></button>
+  </div>
+  <div class="item">
+    <img src="HR.jpg" alt="Item 4">
+    <h3>Aunty Jackie Saloon</h3>
+    <p></p>
+    <button><a href="Order page.html">View</a></button>
+  </div>
+  <div class="item">
+    <img src="item3.jpg" alt="Item 5">
+    <h3>Makula Cosmetics</h3>
+    <p></p>
+    <button><a href="Order page.html">View</a></button>
+  </div>
+  <div class="item">
+    <img src="Brand.jpg" alt="Item 6">
+    <h3>JB STUDios</h3>
+    <p></p>
+    <button><a href="Order page.html">View</a></button>
+  </div>
+  <div class="item">
+    <img src="JB Logo.jpg" alt="Item 7">
+    <h3>G & A Investments</h3>
+    <p></p>
+    <button><a href="Order page.html">View</a></button>
+  </div>
+<div class="item">
+    <img src="Josebwoy.jpg" alt="Item 8">
+    <h3>AJ Investments</h3>
+    <p></p>
+    <button><a href="Order page.html">View</a></button>
+  </div>
+  <div class="item">
+    <img src="Foods.png" alt="Item 9">
+    <h3>S & C Bakery</h3>
+    <p></p>
+    <button><a href="Order page.html">View</a></button>
+  </div>
+  <!-- Add more items as needed -->
+</div>
+  
+
+</body>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JBStudentHub Store</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #3a003a;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #3a003a;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      padding: 20px;
+    }
+    form {
+      background: purple;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 30px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    .store-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+    .item {
+      background: purple;
+      border: 1px solid #ccc;
+      padding: 15px;
+      width: 240px;
+      border-radius: 5px;
+      color: white;
+      text-align: center;
+    }
+    .item img {max-width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .item button {
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="store-container" id="storeItems">
+    <!-- New items will appear here -->
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('itemForm');
+  const store = document.getElementById('storeItems');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const title = document.getElementById('title').value;
+    const price = document.getElementById('price').value;
+    const image = document.getElementById('image').value;
+    const desc = document.getElementById('desc').value;
+
+    const item = document.createElement('div');
+    item.className = 'item';
+    item.innerHTML = `
+      <img src="image" alt="{title}">
+      <h3>title</h3>
+      <p><strong>UGX{price}</strong></p>
+      <p>${desc}</p>
+      <button>Buy Now</button>
+    `;
+    
+    store.prepend(item);
+    form.reset();
+  });
+</script>
+
+</body>
+</html>
