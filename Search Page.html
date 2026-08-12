@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <title>Hello, World!</title>
+</head>
+<body>
+  <h1>
+    Hello, World!
+  </h1>
+</body>
+</html>
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search Results - MyTube</title>
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --card: #181818;
+    --text: #f1f1f1;
+    --muted: #aaaaaa;
+    --red: #ff0000;
+  }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Roboto, Arial, sans-serif; }
+  body { background: var(--bg); color: var(--text); }
+
+  /* HEADER - Same as homepage */
+  header {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 56px; background: var(--bg);
+    display: flex; align-items: center; padding: 0 16px;
+    z-index: 1000; border-bottom: 1px solid #222;
+  }
+  .logo { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: bold; cursor: pointer; }
+  .logo span { color: var(--red); }
+  .search-bar { flex: 1; display: flex; justify-content: center; }
+  .search-bar input {
+    width: 50%; padding: 10px 16px; border-radius: 20px 0 0 20px;
+    border: 1px solid #303030; background: #121212; color: var(--text); outline: none;
+  }
+  .search-bar button {
+    padding: 10px 20px; border-radius: 0 20px 20px 0;
+    border: 1px solid #303030; border-left: none; background: #222; color: var(--text); cursor: pointer;
+  }
+  .profile { width: 32px; height: 32px; border-radius: 50%; background: purple; margin-left: 20px; }
+
+  /* MAIN */
+  main { margin-top: 56px; padding: 24px; max-width: 1200px; margin-left: auto; margin-right: auto; }
+
+  /* FILTERS */
+  .filters { display: flex; gap: 12px; border-bottom: 1px solid #303030; padding-bottom: 12px; margin-bottom: 24px; }
+  .filter-btn {
+    background: none; border: none; color: var(--muted); padding: 8px 0; cursor: pointer;
+    font-size: 14px; border-bottom: 2px solid transparent;
+  }
+  .filter-btn.active { color: var(--text); border-bottom: 2px solid var(--text); }
+
+  /* SEARCH RESULTS LIST */
+  .result-item {
+    display: flex; gap: 16px; margin-bottom: 16px; cursor: pointer;
+  }
+  .result-item:hover .title { color: #3ea6ff; }
+  .result-thumb {
+    position: relative; width: 360px; aspect-ratio: 16/9; flex-shrink: 0;
+    background: #333; border-radius: 12px; overflow: hidden;
+  }
+  .result-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .duration {
+    position: absolute; bottom: 6px; right: 6px;
+    background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 4px; font-size: 12px;
+  }
+  .result-info { flex: 1; }
+  .title { font-size: 18px; margin-bottom: 6px; font-weight: 500; }
+  .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; }
+  .channel { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .channel-icon { width: 24px; height: 24px; border-radius: 50%; background: teal; }
+  .channel-name { font-size: 14px; color: var(--muted); }
+  .description { font-size: 14px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  @media(max-width: 768px) {
+    .result-item { flex-direction: column; }
+    .result-thumb { width: 100%; }
+    .search-bar input { width: 70%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo" onclick="window.location='index.html'">▶️ <span>My</span>Tube</div>
+  <div class="search-bar">
+    <input type="text" placeholder="Search" value="Python tutorial">
+    <button>🔍</button>
+  </div>
+  <div class="profile"></div>
+</header>
+
+<main>
+  <div class="filters">
+    <button class="filter-btn active">All</button>
+    <button class="filter-btn">Videos</button>
+    <button class="filter-btn">Channels</button>
+    <button class="filter-btn">This month</button>
+  </div>
+
+  <!-- Result 1 -->
+  <div class="result-item">
+    <div class="result-thumb">
+      <img src="https://picsum.photos/360/202?random=10" alt="video">
+      <span class="duration">1:12:45</span>
+    </div>
+    <div class="result-info">
+      <h3 class="title">Learn Python for Beginners - Full Course</h3>
+      <p class="meta">1.2M views • 1 month ago</p>
+      <div class="channel">
+        <div class="channel-icon"></div>
+        <span class="channel-name">LearnCode</span>
+      </div>
+      <p class="description">Learn Python programming from scratch. This course covers variables, loops, functions, OOP, and builds 5 real projects. Perfect for beginners in 2026.</p>
+    </div>
+  </div>
+
+  <!-- Result 2 -->
+  <div class="result-item">
+    <div class="result-thumb">
+      <img src="https://picsum.photos/360/202?random=11" alt="video">
+      <span class="duration">15:30</span>
+    </div>
+    <div class="result-info">
+      <h3 class="title">Python Crash Course in 15 Minutes</h3>
+      <p class="meta">450K views • 2 weeks ago</p>
+      <div class="channel">
+        <div class="channel-icon"></div>
+        <span class="channel-name">CodeWithMe</span>
+      </div>
+      <p class="description">Quick Python tutorial covering the most important concepts you need to start coding today. Includes exercises and code examples.</p>
+    </div>
+  </div>
+
+  <!-- Result 3 -->
+  <div class="result-item">
+    <div class="result-thumb">
+      <img src="https://picsum.photos/360/202?random=12" alt="video">
+      <span class="duration">8:24</span>
+    </div>
+    <div class="result-info">
+      <h3 class="title">5 Python Projects for Your Portfolio</h3>
+      <p class="meta">210K views • 3 days ago</p>
+      <div class="channel">
+        <div class="channel-icon"></div>
+        <span class="channel-name">TechUG</span>
+      </div>
+      <p class="description">Build these 5 Python projects to get hired. We build a calculator, to-do app, web scraper, and more with full code.</p>
+    </div>
+  </div>
+
+</main>
+
+</body>
+</html>

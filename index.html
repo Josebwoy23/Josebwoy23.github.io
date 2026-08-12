@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <title>HOME </title>
+</head>
+<body>
+  <h1>
+    Hello, World!
+  </h1>
+</body>
+</html>
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JB PODCAST - Watch, Learn, Share</title>
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --card: #181818;
+    --text: #f1f1f1;
+    --muted: #aaaaaa;
+    --red: #ff0000;
+  }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Roboto, Arial, sans-serif; }
+  body { background: var(--bg); color: var(--text); }
+
+  /* HEADER */
+  header {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 56px; background: var(--bg);
+    display: flex; align-items: center; padding: 0 16px;
+    z-index: 1000; border-bottom: 1px solid #222;
+  }
+  .logo { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: bold; }
+  .logo span { color: var(--red); }
+  .search-bar { flex: 1; display: flex; justify-content: center; }
+  .search-bar input {
+    width: 50%; padding: 10px 16px; border-radius: 20px 0 0 20px;
+    border: 1px solid #303030; background: #121212; color: var(--text); outline: none;
+  }
+  .search-bar button {
+    padding: 10px 20px; border-radius: 0 20px 20px 0;
+    border: 1px solid #303030; border-left: none; background: #222; color: var(--text); cursor: pointer;
+  }
+  .profile { width: 32px; height: 32px; border-radius: 50%; background: purple; margin-left: 20px; }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed; top: 56px; left: 0; width: 240px; height: 100%;
+    background: var(--bg); padding-top: 12px; overflow-y: auto;
+  }
+  .sidebar a {
+    display: flex; align-items: center; gap: 24px; padding: 10px 24px;
+    color: var(--text); text-decoration: none; font-size: 14px;
+  }
+  .sidebar a:hover { background: #272727; }
+  .sidebar a.active { background: #272727; font-weight: bold; }
+
+  /* MAIN CONTENT */
+  main { margin-left: 240px; margin-top: 56px; padding: 24px; }
+  
+  /* CATEGORIES */
+  .categories { display: flex; gap: 12px; margin-bottom: 24px; overflow-x: auto; }
+  .cat-btn {
+    padding: 8px 12px; background: #272727; border: none; border-radius: 8px;
+    color: var(--text); cursor: pointer; white-space: nowrap;
+  }
+  .cat-btn.active { background: var(--text); color: #000; }
+
+  /* VIDEO GRID */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .video-card { cursor: pointer; }
+  .thumbnail {
+    position: relative; width: 100%; aspect-ratio: 16/9;
+    background: #333; border-radius: 12px; overflow: hidden;
+  }
+  .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+  .duration {
+    position: absolute; bottom: 8px; right: 8px;
+    background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 4px; font-size: 12px;
+  }
+  .video-info { display: flex; gap: 12px; margin-top: 12px; }
+  .channel-icon {
+    width: 36px; height: 36px; border-radius: 50%; background: teal; flex-shrink: 0;
+  }
+  .video-details h3 { font-size: 16px; margin-bottom: 4px; }
+  .video-details p { font-size: 14px; color: var(--muted); }
+
+  @media(max-width: 768px) {
+    .sidebar { display: none; }
+    main { margin-left: 0; }
+    .search-bar input { width: 70%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">▶️<span>JB</span>PODCAST</div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="search-bar">
+    <input type="text" placeholder="Search">
+    <button>🔍</button>
+  </div>
+  
+</header>
+<main>
+  <div class="categories">
+    <button class="cat-btn active">All</button>
+    <button class="cat-btn">Music</button>
+    <button class="cat-btn">Gaming</button>
+    <button class="cat-btn">News</button>
+    <button class="cat-btn">Tech</button>
+    <button class="cat-btn">Education</button>
+  </div>
+
+            
+            
+            
+            
+          <div class="video-grid">
+  <!-- Video Card 1 -->
+  <div class="video-card" onclick="window.location='Watch Page.html?v=sn5lIXtFOzQ'">
+    <div class="thumbnail">
+        <img src="epd 4.webp" alt="JB Podcast Ep 1">
+    
+      <span class="duration">10:24</span>
+    </div>
+    <div class="video-info">
+      <div class="channel-icon"></div>
+      <div class="video-details">
+        <h3>Real talk on fam ,pressure and emptiness-(Oil Pro & Josebwoy)</h3>
+        <p>JB PODCAST • 120 views • 3 weeks ago</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Video Card 2 -->
+  <div class="video-card" onclick="window.location='Watch Page.html?v=rfscVS0vtbw'">
+    <div class="thumbnail">
+        <img src="epd 1.webp" alt="JB Podcast Ep 1">
+    
+      <span class="duration">1:12:45</span>
+    </div>
+    <div class="video-info">
+      <div class="channel-icon"></div>
+      <div class="video-details">
+        <h3>Youth life style and living plus unheathy relations-(Jojo,Laiana,Shirat & Josebwoy) </h3>
+        <p>JB PODCAST • 283 views • 1 month ago</p>
+      </div>
+    </div>
+  </div>
+</div>  
+            
+  </br      
+            
+            
+      <div class="video-grid">
+  <!-- Video Card 1 - Your video -->
+  <div class="video-card" onclick="window.location='watch Ian.html?v=sn5lIXtFOzQ'">
+    <div class="thumbnail">
+        <img src="epd 3.webp" alt="JB Podcast Ep 1">
+    
+      <span class="duration">10:24</span> <!-- change this manually -->
+    </div>
+    <div class="video-info">
+      <div class="channel-icon"></div>
+      <div class="video-details">
+        <h3>Big dirty money or little clean money-(Ntege & Laiana)</h3>
+        <p>JB PODCAST • 300 views • 1 month ago</p>
+      </div>
+    </div>
+  </div>
+        
+        </br>
+
+  <!-- Video Card 2 -->
+  <div class="video-card" onclick="window.location='Watch Page.html?v=rfscVS0vtbw'">
+    <div class="thumbnail">
+        <img src="epd 2.webp" alt="JB Podcast Ep 1">
+    
+       <span class="duration">1:12:45</span>
+    </div>
+    <div class="video-info">
+      <div class="channel-icon"></div>
+      <div class="video-details">
+        <h3>Real talk on fam ,pressure and emptiness-(Huncho Samic & Josebwoy)</h3>
+        <p>JB PODCAST• 127 views • 1 month ago</p>
+      </div>
+    </div>
+  </div>
+</div>      
+            
+  </br>
+            
+            <div class="video-card" onclick="window.location='watch.html?v=vjLvJmVBSaI'">
+  <div class="thumbnail">
+    <img src="epd 5.jpg" alt="JB Podcast Ep 1">
+    <span class="duration">10:24</span>
+  </div>
+  <div class="video-info">
+    <div class="channel-icon"></div>
+    <div class="video-details">
+      <h3>Relationship and support issues. Peer influence & societal problems-(Averus Ophisho & Josebwoy</h3>
+      <p>JB Podcast • 232 views • 2 month ago</p>
+    </div>
+  </div>
+</div>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <script>
+  document.getElementById('searchBtn').addEventListener('click', function() {
+    let query = document.getElementById('searchInput').value;
+    if(query.trim() !== "") {
+      // send to search.html with ?q=python
+      window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+    }
+  });
+
+  // Also let user press "Enter"
+  document.getElementById('searchInput').addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') {
+      document.getElementById('searchBtn').click();
+    }
+  });
+</script>
+            
+            
+            
+            
+            
+            
+          </body>
