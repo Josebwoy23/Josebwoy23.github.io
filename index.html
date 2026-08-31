@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>JB PLUS</title>
+
+<!-- PWA - MAKE IT INSTALLABLE LIKE AFROMOBILE -->
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSkIgUExVUyIsInNob3J0X25hbWUiOiJKQiBQTFVTIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwYTA4MTQiLCJ0aGVtZV9jb2xvciI6IiNhMDIwZjAiLCJkZXNjcmlwdGlvbiI6IkpCIFBvZGNhc3QgMjU2IC0gT2ZmaWNpYWwgQXBwIiwiY29ucyI6W3sic3JjIjoiaHR0cHM6Ly9pLmltZ2JiLmNvbS9uSDR4Q2JzL2piLXBsdXMucG5nIiwic2l6ZXMiOiI1MTJ4NTEyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
+<meta name="theme-color" content="#a020f0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="JB PLUS+">
+<link rel="apple-touch-icon" href="https://i.imgbb.com/nH4xCbs/jb-plus.png">
+
+<style>
+*{box-sizing:border-box} body{margin:0;background:#0a0814;color:#fff;font-family:Inter,Arial,sans-serif;padding-bottom:80px}
+.header{padding:14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0a0814f2;backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid #1e1b36}
+.card{margin:12px;background:#16132a;border-radius:18px;overflow:hidden;border:1px solid #2a2550;position:relative}
+.locked-overlay{position:absolute;inset:0;background:rgba(10,8,20,0.94);backdrop-filter:blur(14px);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;padding:22px;text-align:center}
+.btn{width:100%;padding:14px;background:linear-gradient(90deg,#a020f0,#00e5ff);border:0;border-radius:12px;color:#fff;font-weight:900;margin:6px 0;cursor:pointer}
+.btn-pesa{background:linear-gradient(90deg,#ff6a00,#ee0979);box-shadow:0 4px 20px rgba(255,106,0,.4);font-size:16px}
+input{width:100%;padding:13px;border-radius:12px;border:1px solid #3a3560;background:#0f0d1f;color:#fff;text-align:center;font-size:14px}
+.live-frame{width:100%;height:270px;border:0;background:#000}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
+.ep{background:#1e1b36;border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid transparent}
+.ep:active{transform:scale(.97);border-color:#a020f0}
+.ep img{width:100%;height:115px;object-fit:cover;display:block}
+#installBtn{display:none;position:fixed;bottom:15px;left:12px;right:12px;background:#a020f0;padding:14px;border-radius:12px;text-align:center;font-weight:900;z-index:99;box-shadow:0 8px 30px rgba(160,32,240,.5)}
+</style>
+</head>
+<body>
+
+<div class="header"><b id="adminTap">JB <span style="color:#a020f0">PLUS</span></b><small style="color:#ff4d4d;font-weight:700">● LIVE STREAMING</small></div>
+
+<div class="card">
+  <iframe id="livePlayer" class="live-frame"
+   src="https://www.youtube.com/embed/live_stream?channel=UCko2JV1XdHAV50BkPmu3bmg&autoplay=1&mute=1&playsinline=1&controls=1&rel=0&modestbranding=1"
+   allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen>
+  </iframe>
+
+  <div class="locked-overlay" id="lockedBox">
+    <div style="font-size:16px">🔒</div>
+    <h3 style="margin:8px 0 4px">Live Inside App - Subscribers Only</h3>
+    <p style="color:#8b7dff;font-size:12px">Auto-play • No YouTube redirect • All episodes</p>
+    <p style="font-size:20px;font-weight:900;margin:8px 0">UGX 5,000 / month</p>
+    <button class="btn btn-pesa" onclick="payWithPesapal()">💳 Pay UGX 5,000 via Pesapal. MTN/AIRTEL</button>
+    <div style="width:100%;border-top:1px solid #2a2550;margin-top:12px;padding-top:12px">
+      <input id="code" placeholder="Paste Pesapal Transaction Code">
+      <button class="btn" onclick="unlockWithCode()">🔓 Unlock Inside App</button>
+      <p style="font-size:10px;color:#666;margin-top:6px">Only Pesapal codes work. Random numbers blocked.</p>
+    </div>
+  </div>
+  <div style="padding:12px"><b>JB Podcast 256 - Live in Studio</b><br><small style="color:#8b7dff">Live auto-plays here • Fullscreen available</small></div>
+</div>
+
+<div class="card">
+  <div style="padding:12px;display:flex;justify-content:space-between;align-items:center"><b>Latest Full Episodes</b><small id="epCount" style="background:#1e1b36;padding:4px 10px;border-radius:20px;color:#8b7dff">Loading...</small></div>
+  <div class="grid" id="episodesGrid">Loading full episodes (Shorts hidden)...</div>
+</div>
+
+<div id="installBtn" onclick="installApp()">📲 Install JB PLUS+ App</div>
+
+<script>
+// === PWA INSTALL LOGIC - ALL IN ONE FILE ===
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBtn').style.display='block';
+});
+function installApp(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; document.getElementById('installBtn').style.display='none'; });
+  }
+}
+// Service Worker inline - no need separate sw.js file
+if ('serviceWorker' in navigator) {
+  const swCode = `self.addEventListener('install', e=> self.skipWaiting()); self.addEventListener('fetch', e=> e.respondWith(fetch(e.request).catch(()=> caches.match(e.request))));`;
+  const blob = new Blob([swCode], {type:'text/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob));
+}
+
+const ADMIN_PHONE = "0761169646";
+const ADMIN_PASS = "JB2024";
+const PESAPAL_LINK = "https://store.pesapal.com/jbplussubscription";
+const CHANNEL_ID = "UCko2JV1XdHAV50BkPmu3bmg";
+
+function isAdmin(){ return localStorage.getItem('is_admin')==="true"; }
+function isPaid(){
+  if(isAdmin()) return true;
+  let c = localStorage.getItem('jb_paid_code');
+  let d = localStorage.getItem('jb_paid_date');
+  if(!c ||!d) return false;
+  let days = (Date.now() - new Date(d).getTime())/(1000*60*60*24);
+  return days <= 30 && c.length >= 10;
+}
+
+if(isPaid()){
+  document.getElementById('lockedBox').style.display='none';
+  let p = document.getElementById('livePlayer');
+  setTimeout(()=>{ p.src = p.src.replace('&mute=1','&mute=0'); },1500);
+}
+
+let taps=0; document.getElementById('adminTap').addEventListener('click',()=>{
+  taps++; if(taps>=5){
+    let pw=prompt('Admin Passcode:');
+    if(pw===ADMIN_PASS){ localStorage.setItem('is_admin','true'); alert('Admin FREE ON 👑'); location.reload(); }
+    taps=0;
+  }
+  setTimeout(()=>{if(Date.now()) taps=0},3000);
+});
+
+function payWithPesapal(){ window.open(PESAPAL_LINK,'_blank'); alert('After paying MTN/Airtel, copy Transaction ID from SMS/Email and paste here'); }
+
+function unlockWithCode(){
+  let c = document.getElementById('code').value.trim();
+  if(c===ADMIN_PHONE || c==="256761169646" || c==="761169646" || c==="0761169646"){
+    localStorage.setItem('is_admin','true'); alert('Admin unlocked FREE'); location.reload(); return;
+  }
+  if(c.length < 10){
+    alert('❌ Invalid. Random numbers/phone blocked. Paste Pesapal Transaction Code like PES...'); return;
+  }
+  localStorage.setItem('jb_paid_code', c.toUpperCase());
+  localStorage.setItem('jb_paid_date', new Date().toISOString());
+  alert('✅ Unlocked 30 days! Live plays inside now.');
+  document.getElementById('lockedBox').style.display='none';
+  document.getElementById('livePlayer').src = document.getElementById('livePlayer').src.replace('&mute=1','&mute=0');
+  window.open(`https://wa.me/256761169646?text=New%20JB%20PLUS%20Subscriber:%20${encodeURIComponent(c)}`,'_blank');
+}
+
+async function loadEpisodes(){
+  try{
+    let res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`);
+    let data = await res.json();
+    let grid = document.getElementById('episodesGrid'); grid.innerHTML='';
+    let fullVideos = data.items.filter(v=>{
+      let t = v.title.toLowerCase();
+      if(t.includes('#short') || t.includes('# shorts') || t.includes(' #shorts') || v.link.includes('/shorts/')) return false;
+      return true;
+    });
+    document.getElementById('epCount').innerText = fullVideos.length + ' episodes';
+    if(fullVideos.length===0){ grid.innerHTML='<p style="padding:20px;color:#8b7dff">No full episodes, only Shorts found.</p>'; return; }
+    fullVideos.forEach(v=>{
+      let id = v.link.split('v=')[1];
+      let date = new Date(v.pubDate).toDateString().slice(4,10);
+      grid.innerHTML += `<div class="ep" onclick="playEpisode('${id}')"><img src="https://img.youtube.com/vi/${id}/mqdefault.jpg" onerror="this.src='https://img.youtube.com/vi/${id}/hqdefault.jpg'"><div style="padding:7px 8px;font-size:11px;font-weight:800;line-height:1.2">${v.title.slice(0,40)}<br><span style="color:#8b7dff;font-weight:400;font-size:10px">${date} • Full</span></div></div>`;
+    });
+  }catch(e){
+    document.getElementById('episodesGrid').innerHTML = 'Connect internet to load episodes.';
+  }
+}
+function playEpisode(id){
+  if(!isPaid()){ document.getElementById('lockedBox').style.display='flex'; return; }
+  document.getElementById('livePlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1&playsinline=1&controls=1&rel=0&modestbranding=1`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+loadEpisodes();
+</script>
+</body>
+</html>
