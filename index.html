@@ -1,256 +1,214 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>JB PLUS</title>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<style>
-*{box-sizing:border-box} body{margin:0;background:#0a0814;color:#fff;font-family:Inter,Arial,sans-serif;padding-bottom:80px}
-.header{padding:14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0a0814f2;backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid #1e1b36}
-.card{margin:12px;background:#16132a;border-radius:18px;overflow:hidden;border:1px solid #2a2550;position:relative}
-.locked-overlay{position:absolute;inset:0;background:rgba(10,8,20,0.94);backdrop-filter:blur(14px);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;padding:22px;text-align:center}
-.btn{width:100%;padding:14px;background:linear-gradient(90deg,#a020f0,#00e5ff);border:0;border-radius:12px;color:#fff;font-weight:900;margin:6px 0;cursor:pointer}
-.btn-pesa{background:linear-gradient(90deg,#ff6a00,#ee0979);box-shadow:0 4px 20px rgba(255,106,0,.4);font-size:16px}
-input{width:100%;padding:13px;border-radius:12px;border:1px solid #3a3560;background:#0f0d1f;color:#fff;text-align:center;font-size:14px}
-.live-frame{width:100%;height:270px;border:0;background:#000}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
-.ep{background:#1e1b36;border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid transparent}
-.ep:active{transform:scale(.97);border-color:#a020f0}
-.ep img{width:100%;height:115px;object-fit:cover;display:block}
-.radio-card{border:2px solid #ff2a2a!important;box-shadow:0 0 25px rgba(255,42,42,0.15)}
-.live-dot{width:9px;height:9px;background:#ff3b3b;border-radius:50%;display:inline-block;animation:blink 1s infinite;margin-right:6px}
-@keyframes blink{0%,100%{opacity:1} 50%{opacity:0.2}}
-.btn-radio{width:100%;padding:14px;border-radius:12px;border:1px solid #a020f0;background:#211e3d;color:#fff;font-weight:800;margin-top:8px;cursor:pointer}
-.btn-go{width:100%;padding:14px;border-radius:12px;border:0;background:linear-gradient(90deg,#ff2a2a,#ff7a00);color:#fff;font-weight:900;margin-top:8px;cursor:pointer}
-.badge-live{font-size:11px;padding:5px 12px;border-radius:20px;background:#2a2545;font-weight:700;color:#fff}
-</style>
-<script>
-const firebaseConfig={apiKey:"AIzaSyAmrrkppcR8GGKtUSyEtZYjfxm4YlyoQ-E",authDomain:"jb-plus.firebaseapp.com",projectId:"jb-plus",storageBucket:"jb-plus.firebasestorage.app",messagingSenderId:"329285870532",appId:"1:329285870532:web:e83446078e71ffad867a91"};
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, listAll, deleteObject } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+const firebaseConfig = { apiKey: "YOUR_API_KEY", authDomain: "YOUR_PROJECT.firebaseapp.com", projectId: "YOUR_PROJECT_ID", storageBucket: "YOUR_PROJECT.appspot.com", messagingSenderId: "123", appId: "YOUR_APP_ID" };
+try{const app=initializeApp(firebaseConfig); window.storage=getStorage(app); window.fb={ref,uploadBytesResumable,getDownloadURL,listAll,deleteObject};}catch(e){}
 </script>
+<style>
+body{margin:0;font-family:Arial,sans-serif;padding-bottom:80px;background:linear-gradient(180deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
+.tab{display:none;min-height:100vh;padding:12px}.active{display:block}
+.nav{position:fixed;bottom:0;width:100%;display:flex;background:#fff;border-top:none;z-index:999;box-shadow:0 -2px 10px rgba(0,0,0,0.3)}
+.nav button{flex:1;padding:15px;background:none;color:#333;border:none;font-size:13px;font-weight:bold}
+.nav button.active-nav{color:#ff0066}
+.header{background:linear-gradient(90deg,#ff0066,#ffcc00);padding:18px;border-radius:0 0 20px 20px;margin:-12px -12px 15px -12px;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
+.card{background:#ffffff;color:#222;padding:14px;margin:10px 0;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+.card-dark{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.2)}
+.btn{padding:14px;border:none;border-radius:25px;font-weight:bold;width:100%;margin:6px 0;font-size:15px;box-shadow:0 3px 8px rgba(0,0,0,0.2)}
+.btn-red{background:linear-gradient(90deg,#ff0033,#ff6600);color:#fff}.btn-green{background:linear-gradient(90deg,#00c853,#00e676);color:#fff}.btn-yellow{background:linear-gradient(90deg,#ffcc00,#ff9900);color:#000}
+input{padding:13px;width:90%;border-radius:25px;border:2px solid #eee;background:#fff;color:#333;margin:6px 0;outline:none}
+.chat-box{height:250px;overflow-y:auto;background:#f5f5f5;border-radius:12px;padding:10px;margin:10px 0}
+.chat-msg{background:#fff;padding:8px 12px;border-radius:18px;margin:6px 0;box-shadow:0 1px 3px rgba(0,0,0,0.1);color:#333;font-size:14px;position:relative}
+.chat-msg b{color:#ff0066}
+.admin-only{display:none!important}
+.delete-btn{float:right;background:#ff0000;color:#fff;border:none;border-radius:10px;padding:2px 8px;font-size:11px;display:none}
+.is-admin .delete-btn{display:inline}
+.live-dot{width:10px;height:10px;background:red;border-radius:50%;display:inline-block;animation:blink 1s infinite}
+@keyframes blink{0%{opacity:1}50%{opacity:0}100%{opacity:1}}
+.video-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.video-item{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+.video-item p{color:#333;font-size:12px;padding:6px;margin:0;font-weight:bold}
+</style>
 </head>
 <body>
 
-<div class="header"><b id="adminTap">JB <span style="color:#a020f0">PLUS</span></b><small style="color:#ff4d4d;font-weight:700">● LIVE STREAMING</small></div>
-
-<div class="card">
-  <iframe id="livePlayer" class="live-frame"
-   src="https://www.youtube.com/embed/live_stream?channel=UCko2JV1XdHAV50BkPmu3bmg&autoplay=1&mute=1&playsinline=1&controls=1&rel=0&modestbranding=1"
-   allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen>
-  </iframe>
-  <div class="locked-overlay" id="lockedBox">
-    <div style="font-size:16px">🔒</div>
-    <h3 style="margin:8px 0 4px">Live Inside App - Subscribers Only</h3>
-    <p style="color:#8b7dff;font-size:12px">Auto-play • No YouTube redirect • All episodes</p>
-    <p style="font-size:20px;font-weight:900;margin:8px 0">UGX 5,000 / month</p>
-    <button class="btn btn-pesa" onclick="payWithPesapal()">💳 Pay UGX 5,000 via Pesapal. MTN/AIRTEL</button>
-    <div style="width:100%;border-top:1px solid #2a2550;margin-top:12px;padding-top:12px">
-      <input id="code" placeholder="Paste Pesapal Transaction Code">
-      <button class="btn" onclick="unlockWithCode()">🔓 Unlock Inside App</button>
-      <p style="font-size:10px;color:#666;margin-top:6px">Only Pesapal codes work. Random numbers blocked.</p>
-    </div>
-  </div>
-  <div style="padding:12px"><b>JB Podcast 256 - Live in Studio</b><br><small style="color:#8b7dff">Live auto-plays here • Fullscreen available</small></div>
+<div class="header">
+<h2 id="secretTap" style="margin:0;color:#fff;letter-spacing:1px">JB PLUS</h2>
+<p style="margin:3px 0 0 0;font-size:12px;color:#fff;opacity:0.9">Official App</p>
 </div>
 
-<div class="card radio-card">
-  <div style="padding:14px">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div style="font-weight:900;font-size:16px"><span class="live-dot"></span>JB RADIO LIVE</div>
-      <div id="radioStatus" class="badge-live">OFFLINE</div>
-    </div>
-    <small style="color:#8b7dff;font-size:12px">Kampala Youth Podcast - Audio only</small>
-    <div id="listenerBox">
-      <button class="btn-radio" id="joinRadioBtn">▶️ LISTEN JB RADIO LIVE NOW</button>
-      <p id="listenerInfo" style="text-align:center;font-size:11px;color:#666;margin:6px 0 0">Tap to connect</p>
-      <audio id="rAudio" autoplay style="display:none"></audio>
-    </div>
-    <div id="broadcasterBox" style="display:none;margin-top:12px;border-top:1px solid #2a2550;padding-top:12px">
-      <div style="color:#00e5ff;font-size:11px;font-weight:800;margin-bottom:6px">🎙️ BROADCASTER - JB ONLY</div>
-      <button class="btn-go" id="goLiveBtn">🎙️ GO LIVE ON RADIO</button>
-      <button class="btn-radio" id="stopLiveBtn" style="display:none;background:#333">⏹️ STOP RADIO</button>
-    </div>
-    <div style="text-align:center;margin-top:8px"><small id="radioTap" style="color:#3a3560;font-size:10px;text-decoration:underline">Tap 5 times for radio broadcaster</small></div>
-  </div>
+<div id="radio" class="tab active">
+<div class="card">
+<h3 style="margin:0 0 8px 0"><span class="live-dot"></span> JB RADIO LIVE</h3>
+<p id="lStat" style="color:#666;font-size:13px">Radio is Offline - Tap Listen</p>
+<button class="btn btn-green" onclick="joinAsListener()">Listen Live</button>
+<div class="admin-only" id="adminRadio">
+<hr>
+<p>Status: <span id="rStat" style="color:red">OFFLINE</span> | Listeners: <span id="rLis">0</span></p>
+<button class="btn btn-red" onclick="goLive()">START BROADCAST</button>
+<button class="btn" onclick="stopLive()" style="background:#333;color:#fff">Stop</button>
+<p id="rLog" style="font-size:10px;color:#888"></p>
+</div>
 </div>
 
+<!-- LIVE CHAT - EVERYONE CAN SEE -->
 <div class="card">
-  <div style="padding:12px;display:flex;justify-content:space-between;align-items:center"><b>Latest Full Episodes</b><small id="epCount" style="background:#1e1b36;padding:4px 10px;border-radius:20px;color:#8b7dff">Loading...</small></div>
-  <div class="grid" id="episodesGrid">Loading full episodes (Shorts hidden)...</div>
+<h3 style="margin:0">COMMENTS</h3>
+<p style="font-size:11px;color:#888;margin:4px 0">Everyone can chat, you can delete bad comments</p>
+<div id="chatBox" class="chat-box"></div>
+<input id="chatName" placeholder="Your Name" style="width:35%;display:inline-block">
+<input id="chatInput" placeholder="Type message..." style="width:55%;display:inline-block">
+<button class="btn btn-red" onclick="sendChat()" style="padding:10px;margin-top:8px">Send Message</button>
+</div>
+</div>
+
+<div id="live" class="tab">
+<div class="card">
+<h3>JB LIVE TV - Paid</h3>
+<p style="font-size:13px;color:#666">Subscribe to Stream live -5000/month</p>
+<button class="btn btn-yellow" onclick="openPesapal()">PAY WITH PESAPAL - MTN/AIRTEL</button>
+<p style="font-size:11px;color:#888;text-align:center">store.pesapal.com/jbplussubscription</p>
+<input id="transId" placeholder="Enter Transaction ID after pay">
+<button class="btn btn-green" onclick="unlockLive()">Unlock Live</button>
+</div>
+<div id="payWall" style="display:none"></div>
+<div id="liveContent" style="display:none">
+<div class="card" style="padding:5px">
+<iframe width="100%" height="220" src="https://www.youtube-nocookie.com/embed/live_stream?channel=UCko2JV1XdHAV50BkPmu3bmg" style="border-radius:12px" allowfullscreen></iframe>
+</div>
+</div>
+</div>
+
+<div id="episodes" class="tab">
+<div class="card" style="background:linear-gradient(90deg,#ff0066,#ffcc00);color:#fff">
+<h3 style="margin:0">All Videos From Your Channel</h3>
+<p style="margin:5px 0 0 0;font-size:12px">Auto loads all YouTube videos</p>
+</div>
+<div id="videoList" class="video-grid"></div>
+<div class="card">
+<button class="btn btn-green" onclick="loadAllVideos()">Refresh All Videos</button>
+</div>
+</div>
+
+<div id="upload" class="tab admin-only">
+<div class="card">
+<h3>Upload Songs - Admin Only</h3>
+<input type="file" id="fileInput">
+<button class="btn btn-green" onclick="uploadFile()">Upload Song</button>
+<p id="upProg"></p>
+</div>
+<div id="fileList"></div>
+</div>
+
+<div class="nav">
+<button id="navRadio" class="active-nav" onclick="openTab('radio')">Radio</button>
+<button id="navLive" onclick="openTab('live')">Live</button>
+<button id="navEp" onclick="openTab('episodes')">Episodes</button>
+<button id="navUpload" class="admin-only" onclick="openTab('upload')">Upload</button>
 </div>
 
 <script>
-const ADMIN_PHONE = "0761169646";
-const ADMIN_PASS = "JB2024";
-const PESAPAL_LINK = "https://store.pesapal.com/jbplussubscription";
-const CHANNEL_ID = "UCko2JV1XdHAV50BkPmu3bmg";
+const SERVER_URL="https://josebwoy23-github-io-1.onrender.com";
+const PESAPAL_LINK="https://store.pesapal.com/jbplussubscription";
+const CHANNEL_ID="UCko2JV1XdHAV50BkPmu3bmg";
+let socket,isLive=false,mediaRecorder,isListener=false,tapCount=0,lastTap=0;
+let isAdmin = localStorage.getItem('jb_is_admin')==='yes';
+let chats=[];
 
-function isAdmin(){ return localStorage.getItem('is_admin')==="true"; }
-function isPaid(){
-  if(isAdmin()) return true;
-  let c = localStorage.getItem('jb_paid_code');
-  let d = localStorage.getItem('jb_paid_date');
-  if(!c ||!d) return false;
-  let days = (Date.now() - new Date(d).getTime())/(1000*60*60*24);
-  return days <= 30 && c.length >= 10;
-}
-
-if(isPaid()){
-  document.getElementById('lockedBox').style.display='none';
-  let p = document.getElementById('livePlayer');
-  setTimeout(()=>{ p.src = p.src.replace('&mute=1','&mute=0'); },1500);
-}
-
-let taps=0; document.getElementById('adminTap').addEventListener('click',()=>{
-  taps++; if(taps>=5){
-    let pw=prompt('Admin Passcode:');
-    if(pw===ADMIN_PASS){ localStorage.setItem('is_admin','true'); alert('Admin FREE ON 👑'); location.reload(); }
-    taps=0;
-  }
-  setTimeout(()=>{ taps=0},3000);
+document.getElementById('secretTap').addEventListener('click',()=>{
+ let now=Date.now(); if(now-lastTap>3000) tapCount=0; tapCount++; lastTap=now;
+ if(tapCount>=5){ tapCount=0; let pin=prompt('Admin Password:'); if(pin==='7788'){ isAdmin=true; localStorage.setItem('jb_is_admin','yes'); showAdmin(); alert('Admin Mode ON - You can delete chats & broadcast'); }}
 });
+function showAdmin(){ let s=document.createElement('style'); s.innerHTML='.admin-only{display:block!important} .is-admin .delete-btn{display:inline!important}'; document.head.appendChild(s); document.getElementById('chatBox').classList.add('is-admin');}
+if(isAdmin){ showAdmin(); setTimeout(()=>document.getElementById('chatBox').classList.add('is-admin'),500); }
 
-function payWithPesapal(){ window.open(PESAPAL_LINK,'_blank'); alert('After paying MTN/Airtel, copy Transaction ID from SMS/Email and paste here'); }
-
-function unlockWithCode(){
-  let c = document.getElementById('code').value.trim();
-  if(c===ADMIN_PHONE || c==="256761169646" || c==="761169646" || c==="0761169646"){
-    localStorage.setItem('is_admin','true'); alert('Admin unlocked FREE'); location.reload(); return;
-  }
-  if(c.length < 10){
-    alert('❌ Invalid. Random numbers/phone blocked. Paste Pesapal Transaction Code like PES...'); return;
-  }
-  localStorage.setItem('jb_paid_code', c.toUpperCase());
-  localStorage.setItem('jb_paid_date', new Date().toISOString());
-  alert('✅ Unlocked 30 days! Live plays inside now.');
-  document.getElementById('lockedBox').style.display='none';
-  document.getElementById('livePlayer').src = document.getElementById('livePlayer').src.replace('&mute=1','&mute=0');
-  window.open(`https://wa.me/256761169646?text=New%20JB%20PLUS%20Subscriber:%20${encodeURIComponent(c)}`,'_blank');
+function openPesapal(){ window.open(PESAPAL_LINK,'_blank'); }
+function openTab(t){
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+ document.getElementById(t).classList.add('active');
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active-nav'));
+ if(t==='radio') document.getElementById('navRadio').classList.add('active-nav');
+ if(t==='live') document.getElementById('navLive').classList.add('active-nav');
+ if(t==='episodes'){ document.getElementById('navEp').classList.add('active-nav'); loadAllVideos(); }
+ if(!socket) initRadio();
+ if(t==='upload') listFiles();
+ if(t==='live') checkPay();
 }
 
-async function loadEpisodes(){
-  try{
-    let res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`);
-    let data = await res.json();
-    let grid = document.getElementById('episodesGrid'); grid.innerHTML='';
-    let fullVideos = data.items.filter(v=>{
-      let t = v.title.toLowerCase();
-      if(t.includes('#short') || t.includes('# shorts') || t.includes(' #shorts') || v.link.includes('/shorts/')) return false;
-      return true;
-    });
-    document.getElementById('epCount').innerText = fullVideos.length + ' episodes';
-    if(fullVideos.length===0){ grid.innerHTML='<p style="padding:20px;color:#8b7dff">No full episodes</p>'; return; }
-    fullVideos.forEach(v=>{
-      let id = v.link.split('v=')[1];
-      let date = new Date(v.pubDate).toDateString().slice(4,10);
-      grid.innerHTML += `<div class="ep" onclick="playEpisode('${id}')"><img src="https://img.youtube.com/vi/${id}/mqdefault.jpg"><div style="padding:7px 8px;font-size:11px;font-weight:800;line-height:1.2">${v.title.slice(0,40)}<br><span style="color:#8b7dff;font-weight:400;font-size:10px">${date} • Full</span></div></div>`;
-    });
-  }catch(e){
-    document.getElementById('episodesGrid').innerHTML = 'Connect internet to load episodes.';
-  }
+function initRadio(){
+ socket=io(SERVER_URL);
+ socket.on('radio-status',d=>{ if(isAdmin){document.getElementById('rStat').innerText=d.live?'LIVE':'OFFLINE'; document.getElementById('rLis').innerText=d.listeners;} document.getElementById('lStat').innerText=d.live?'LIVE NOW - '+d.listeners+' listening':'Radio Offline';});
+ socket.on('audio-chunk',playChunk);
+ // CHAT EVENTS - works with any socket server, plus local fallback
+ socket.on('chat-message', data=>{ addChatToUI(data.name, data.msg, data.id); });
+ socket.on('chat-delete', id=>{ document.getElementById('chat-'+id)?.remove(); });
+ socket.on('chat-history', hist=>{ hist.forEach(c=>addChatToUI(c.name,c.msg,c.id)); });
 }
 
-function playEpisode(id){
-  if(!isPaid()){ document.getElementById('lockedBox').style.display='flex'; return; }
-  document.getElementById('livePlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1&playsinline=1&controls=1&rel=0&modestbranding=1`;
-  window.scrollTo({top:0,behavior:'smooth'});
+function addChatToUI(name, msg, id){
+ if(document.getElementById('chat-'+id)) return;
+ let box=document.getElementById('chatBox');
+ let div=document.createElement('div'); div.className='chat-msg'; div.id='chat-'+id;
+ div.innerHTML=`<b>${name}:</b> ${msg} <button class="delete-btn" onclick="deleteChat('${id}')">X</button>`;
+ box.appendChild(div); box.scrollTop=box.scrollHeight;
+ if(isAdmin) div.parentElement.classList.add('is-admin');
 }
-loadEpisodes();
-
-// --- RADIO FIXED - ONLY JB CAN BROADCAST ---
-let myId="u_"+Math.floor(Math.random()*999999);
-let localStream=null,pcs={};
-let radioTaps=0;
-
-function showBroadcasterIfAdmin(){
-  if(isAdmin()){
-    document.getElementById('broadcasterBox').style.display='block';
-  }else{
-    document.getElementById('broadcasterBox').style.display='none';
-  }
+function sendChat(){
+ let name=document.getElementById('chatName').value||'User';
+ let msg=document.getElementById('chatInput').value; if(!msg) return;
+ let id=Date.now().toString();
+ let data={name,msg,id};
+ // Try socket, but also show locally
+ if(socket) socket.emit('chat-message', data);
+ addChatToUI(name,msg,id);
+ // Save locally so everyone sees even if server not support chat
+ chats.push(data); localStorage.setItem('jb_chats', JSON.stringify(chats.slice(-50)));
+ document.getElementById('chatInput').value='';
 }
-showBroadcasterIfAdmin();
+function deleteChat(id){
+ if(!isAdmin){ alert('Only admin can delete'); return; }
+ if(socket) socket.emit('chat-delete', id);
+ document.getElementById('chat-'+id)?.remove();
+ // Also remove from local
+ chats=chats.filter(c=>c.id!==id); localStorage.setItem('jb_chats', JSON.stringify(chats));
+}
+// Load old chats from local
+try{ chats=JSON.parse(localStorage.getItem('jb_chats')||'[]'); chats.forEach(c=>addChatToUI(c.name,c.msg,c.id)); }catch(e){}
 
-document.getElementById('radioTap').onclick=()=>{
-  radioTaps++;
-  if(radioTaps>=5){
-    let pin = prompt("Enter JB Admin Passcode (Only JB):");
-    if(pin===ADMIN_PASS){
-      localStorage.setItem('is_admin','true');
-      document.getElementById('broadcasterBox').style.display='block';
-      alert("JB Broadcaster ON 👑 - Only you can Go Live");
-      location.reload();
-    }else{
-      alert("Only JB can broadcast radio. Listeners can only LISTEN.");
-    }
-    radioTaps=0;
-  }
-  setTimeout(()=>{radioTaps=0},3000);
-};
+async function goLive(){if(!isAdmin)return; socket.emit('host-join','7788'); let s=await navigator.mediaDevices.getUserMedia({audio:true}); mediaRecorder=new MediaRecorder(s,{mimeType:'audio/webm'}); mediaRecorder.ondataavailable=e=>{if(e.data.size>0&&isLive)socket.emit('audio-chunk',e.data)}; mediaRecorder.start(200); isLive=true; document.getElementById('rStat').innerText='LIVE';}
+function stopLive(){isLive=false; if(mediaRecorder)mediaRecorder.stop();}
+function joinAsListener(){if(!socket)initRadio(); socket.emit('listener-join'); document.getElementById('lStat').innerText='Listening...'; isListener=true;}
+function playChunk(c){if(!isListener)return; let b=new Blob([c],{type:'audio/webm'}); let u=URL.createObjectURL(b); new Audio(u).play();}
+function checkPay(){if(localStorage.getItem('jb_live_paid')==='yes'){document.getElementById('payWall').style.display='none';document.getElementById('liveContent').style.display='block';}}
+function unlockLive(){let tid=document.getElementById('transId').value; if(tid.length<3){alert('Enter ID');return;} if(tid==='7788'||tid.length>=5){localStorage.setItem('jb_live_paid','yes'); document.getElementById('liveContent').style.display='block'; alert('Unlocked!');}}
 
-document.getElementById('goLiveBtn').onclick=async()=>{
-  if(!isAdmin()){
-    alert("Only JB can broadcast!");
-    return;
-  }
-  try{
-    document.getElementById('radioStatus').innerText='🔴 LIVE';
-    document.getElementById('radioStatus').style.background='#ff3b3b';
-    document.getElementById('goLiveBtn').style.display='none';
-    document.getElementById('stopLiveBtn').style.display='block';
-    document.getElementById('listenerInfo').innerText='🔴 YOU ARE LIVE - Talking';
-    localStream=await navigator.mediaDevices.getUserMedia({audio:true});
-    await db.collection('jb_radio').doc('host').set({isLive:true,time:new Date()});
-    db.collection('jb_radio_listeners').onSnapshot(async snap=>{
-      for(let ch of snap.docChanges()){
-        if(ch.type==='added'){
-          let lid=ch.doc.id; if(pcs[lid])continue;
-          let pc=new RTCPeerConnection({iceServers:[{urls:"stun:stun.l.google.com:19302"}]});
-          pcs[lid]=pc;
-          localStream.getTracks().forEach(t=>pc.addTrack(t,localStream));
-          pc.onicecandidate=e=>{if(e.candidate)db.collection('jb_radio_candidates_host').doc(lid).collection('candidates').add(e.candidate.toJSON());};
-          let offer=await pc.createOffer(); await pc.setLocalDescription(offer);
-          await db.collection('jb_radio_offers').doc(lid).set({offer:{type:offer.type,sdp:offer.sdp}});
-          db.collection('jb_radio_answers').doc(lid).onSnapshot(async s=>{let d=s.data();if(d&&d.answer&&!pc.currentRemoteDescription)try{await pc.setRemoteDescription(new RTCSessionDescription(d.answer));}catch{}});
-          db.collection('jb_radio_candidates_listener').doc(lid).collection('candidates').onSnapshot(ss=>{ss.docChanges().forEach(async c=>{if(c.type==='added')try{await pc.addIceCandidate(new RTCIceCandidate(c.doc.data()));}catch{}})});
-        }
-        if(ch.type==='removed'){let id=ch.doc.id; if(pcs[id]){pcs[id].close();delete pcs[id];}}
-      }
-    });
-  }catch(e){alert("Allow Mic: "+e.message);}
-};
-
-document.getElementById('stopLiveBtn').onclick=async()=>{
-  if(localStream)localStream.getTracks().forEach(t=>t.stop());
-  Object.values(pcs).forEach(p=>p.close());
-  pcs={};
-  try{await db.collection('jb_radio').doc('host').set({isLive:false});}catch{}
-  document.getElementById('goLiveBtn').style.display='block';
-  document.getElementById('stopLiveBtn').style.display='none';
-  document.getElementById('radioStatus').innerText='OFFLINE';
-  document.getElementById('radioStatus').style.background='#2a2545';
-  document.getElementById('listenerInfo').innerText='Tap to connect';
-};
-
-document.getElementById('joinRadioBtn').onclick=async()=>{
-  try{
-    document.getElementById('listenerInfo').innerText='🔊 Connecting...';
-    document.getElementById('radioStatus').innerText='🔴 ON AIR';
-    document.getElementById('radioStatus').style.background='#ff3b3b';
-    let n=localStorage.getItem('jb_name')||"Listener";
-    myId="u_"+Math.floor(Math.random()*999999);
-    await db.collection('jb_radio_listeners').doc(myId).set({name:n,time:new Date()});
-    let pc=new RTCPeerConnection({iceServers:[{urls:"stun:stun.l.google.com:19302"}]});
-    pc.ontrack=e=>{let a=document.getElementById('rAudio');a.srcObject=e.streams[0];a.play().catch(()=>{}); document.getElementById('listenerInfo').innerText='🔊 LIVE - Connected'; document.getElementById('joinRadioBtn').innerText='🔊 Listening...';};
-    pc.onicecandidate=e=>{if(e.candidate)db.collection('jb_radio_candidates_listener').doc(myId).collection('candidates').add(e.candidate.toJSON());};
-    db.collection('jb_radio_offers').doc(myId).onSnapshot(async s=>{let d=s.data();if(d&&d.offer){await pc.setRemoteDescription(new RTCSessionDescription(d.offer));let ans=await pc.createAnswer();await pc.setLocalDescription(ans);await db.collection('jb_radio_answers').doc(myId).set({answer:{type:ans.type,sdp:ans.sdp}});}});
-    db.collection('jb_radio_candidates_host').doc(myId).collection('candidates').onSnapshot(ss=>{ss.docChanges().forEach(async c=>{if(c.type==='added')try{await pc.addIceCandidate(new RTCIceCandidate(c.doc.data()));}catch{}})});
-    setTimeout(()=>{if(!document.getElementById('rAudio').srcObject){document.getElementById('listenerInfo').innerText='⏳ Waiting for JB to Go Live...';}},3000);
-  }catch(e){alert("Set Firestore Rules to allow read, write: if true; - "+e.message);}
-};
+// EPISODES - SHOW ALL VIDEOS
+async function loadAllVideos(){
+ document.getElementById('videoList').innerHTML='<p style="color:#fff;text-align:center">Loading all your YouTube videos...</p>';
+ try{
+   let rssUrl='https://www.youtube.com/feeds/videos.xml?channel_id='+CHANNEL_ID;
+   let apiUrl='https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(rssUrl);
+   let res=await fetch(apiUrl); let data=await res.json();
+   let html='';
+   data.items.forEach(v=>{
+     let vid=v.link.split('v=')[1];
+     html+=`<div class="video-item"><iframe width="100%" height="110" src="https://www.youtube-nocookie.com/embed/${vid}" allowfullscreen></iframe><p>${v.title.substring(0,40)}</p></div>`;
+   });
+   document.getElementById('videoList').innerHTML=html;
+ }catch(e){
+   // Fallback - show at least 6 embeds manually if API fails
+   document.getElementById('videoList').innerHTML='<div class="video-item"><iframe width="100%" height="110" src="https://www.youtube-nocookie.com/embed/videoseries?list=UUko2JV1XdHAV50BkPmu3bmg" allowfullscreen></iframe><p>Your Playlist</p></div>';
+ }
+}
+async function uploadFile(){const f=document.getElementById('fileInput').files[0];if(!f)return alert('Select file'); if(!window.storage)return alert('Add Firebase config'); const r=window.fb.ref(window.storage,'jb_songs/'+Date.now()+'_'+f.name); const t=window.fb.uploadBytesResumable(r,f); t.on('state_changed',s=>{document.getElementById('upProg').innerText=Math.round(s.bytesTransferred/s.totalBytes*100)+'%'},e=>alert(e),()=>{document.getElementById('upProg').innerText='Done!'; listFiles();});}
+async function listFiles(){if(!window.storage)return; try{const lr=window.fb.ref(window.storage,'jb_songs/'); const res=await window.fb.listAll(lr); let h=''; for(let it of res.items){const url=await window.fb.getDownloadURL(it); h+=`<div class="card"><b>${it.name}</b><br><a href="${url}" target="_blank">Play</a></div>`;}document.getElementById('fileList').innerHTML=h;}catch(e){}}
+initRadio();
+loadAllVideos();
 </script>
 </body>
   </html>
