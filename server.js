@@ -1,35 +1,59 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
+const cors = require('cors');
+
 const app = express();
+app.use(cors());
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
+const io = new Server(server, { cors: { origin: "*" }, maxHttpBufferSize: 1e6 });
 
-let hostSocket = null;
+let hostId = null;
 let listeners = 0;
+let isLive = false;
 
-app.get('/', (req,res)=>res.send(`JB TRUE RADIO - LIVE: ${hostSocket!==null} - Listeners: ${listeners}`));
+app.get('/', (req,res)=> res.send('JB Radio Server Running - Listeners: '+listeners));
 
 io.on('connection', (socket)=>{
-  socket.on('host-join',(pin)=>{
+  console.log('New:', socket.id);
+  io.emit('radio-status', { live: isLive, listeners });
+
+  socket.on('host-join', (pin)=>{
     if(pin==='7788'){
-      hostSocket=socket;
-      io.emit('radio-status',{live:true,listeners});
-      console.log('JB HOST LIVE');
-    } else socket.emit('error','Wrong PIN');
+      hostId = socket.id;
+      isLive = true;
+      console.log('Host joined:', hostId);
+      io.emit('radio-status', { live: true, listeners });
+    }
   });
-  socket.on('listener-join',()=>{
-    listeners++; io.emit('radio-status',{live:hostSocket!==null,listeners});
-    if(hostSocket) socket.emit('radio-status',{live:true,listeners});
+
+  socket.on('listener-join', ()=>{
+    listeners++;
+    console.log('Listener joined, total:', listeners);
+    io.emit('radio-status', { live: isLive, listeners });
   });
-  socket.on('audio-chunk',(chunk)=>{
-    if(socket===hostSocket) socket.broadcast.emit('audio-chunk',chunk);
+
+  // THIS IS THE FIX - Broadcast audio to ALL listeners
+  socket.on('audio-chunk', (chunk)=>{
+    if(socket.id===hostId){
+      socket.broadcast.emit('audio-chunk', chunk);
+    }
   });
-  socket.on('disconnect',()=>{
-    if(socket===hostSocket){hostSocket=null; io.emit('radio-status',{live:false,listeners});}
-    else {listeners=Math.max(0,listeners-1); io.emit('radio-status',{live:hostSocket!==null,listeners});}
+
+  socket.on('chat-message', (data)=>{
+    io.emit('chat-message', data);
+  });
+
+  socket.on('chat-delete', (id)=>{
+    io.emit('chat-delete', id);
+  });
+
+  socket.on('disconnect', ()=>{
+    if(socket.id===hostId){ isLive=false; hostId=null; console.log('Host left'); }
+    else { if(listeners>0) listeners--; }
+    io.emit('radio-status', { live: isLive, listeners });
   });
 });
-const PORT=process.env.PORT||3000;
-server.listen(PORT,()=>console.log('RUNNING ON '+PORT));
 
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, ()=> console.log('Server on '+PORT));
