@@ -2,8 +2,8 @@
 <html>
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>JB PLUS V30 FINAL</title>
-<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<title>JB PLUS V32 JBLIVE CHANNEL</title>
+<script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
 <script src="https://www.youtube.com/iframe_api"></script>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -19,120 +19,78 @@ body{margin:0;background:#0a0a14;color:#fff;padding:0 12px 90px 12px}
 .lock-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:#0a0a14;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
 .video-info{padding:12px;background:#1a1a2e;display:flex;justify-content:space-between}
 .badge-live{background:#00c853;color:#fff;padding:4px 10px;border-radius:12px;font-size:10px}.badge-locked{background:#ff3b30;color:#fff;padding:4px 10px;border-radius:12px;font-size:10px}
-.radio-card{background:#121222;border:2px solid #ff3b30;border-radius:20px;padding:16px;margin:16px 0}
+.radio-card{background:#121222;border:2px solid #00e676;border-radius:20px;padding:16px;margin:16px 0}
 .btn{padding:13px;border:none;border-radius:12px;width:100%;font-weight:700;margin:6px 0}.btn-pay{background:linear-gradient(90deg,#ff0066,#ff9900);color:#fff}
 input{padding:13px;width:100%;border-radius:10px;border:2px solid #2a2a40;background:#0a0a14;color:#fff;margin:6px 0}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ep-card{background:#1a1a2e;border-radius:14px;overflow:hidden;border:1px solid #2a2a40}.ep-card img{width:100%;aspect-ratio:16/10;object-fit:cover}.ep-card p{font-size:11px;padding:8px;margin:0}
 .admin-only{display:none!important}
 .admin-panel{background:#1a1a3a;border:2px solid #ff0066;border-radius:12px;padding:12px;margin:10px}
-.admin-panel button{flex:1;padding:10px;border-radius:10px;border:1px solid #2a2a40;background:#0a0a14;color:#8b5cf6;font-size:10px;font-weight:700}.admin-panel button.active{background:linear-gradient(90deg,#ff0066,#ff9900);color:#fff;border:none}
 </style>
 </head>
 <body>
-<div class="topbar"><b id="secretTap">JB <span style="color:#8b5cf6">PLUS</span></b><span style="color:#ff3b30;font-size:11px">● Kampala Uganda</span></div>
-
+<div class="topbar"><b id="secretTap">JB <span style="color:#8b5cf6">PLUS</span></b><span style="color:#00e676;font-size:11px">● Kampala Uganda</span></div>
 <div class="video-card">
-<div class="video-player">
-<div id="ytLive"></div>
-<audio id="fillerAudio" controls autoplay style="display:none"></audio>
-<div class="player-top"><div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;background:#ff3b30;border-radius:50%"></div><span style="font-size:11px;font-weight:700">Streaming now</span></div><span id="feedLabel" style="font-size:9px;background:rgba(255,0,102,.9);padding:4px 8px;border-radius:12px">LIVE</span></div>
-
-<div class="lock-overlay" id="lockOverlay"><div style="font-size:32px">🔒</div><h3>Live Locked Pay UGX 5000 Per Month</h3><button class="btn btn-pay" onclick="window.open('https://store.pesapal.com/jbplussubscription','_blank')">🇺🇬 PAY PESAPAL</button><div style="display:flex;gap:6px;width:100%;margin-top:10px"><input id="transId" placeholder=""><button onclick="verifyPayment()" style="background:#fff;color:#000;border:none;padding:13px 18px;border-radius:10px;font-weight:700">OK</button></div></div>
+<div class="video-player"><div id="ytLive"></div><audio id="fillerAudio" controls autoplay style="display:none"></audio>
+<div class="player-top"><span style="font-size:11px;font-weight:700">Streaming now</span><span id="feedLabel" style="font-size:9px;background:rgba(255,0,102,.9);padding:4px 8px;border-radius:12px">LIVE</span></div>
+<div class="lock-overlay" id="lockOverlay"><div style="font-size:32px">🔒</div><h3>Live Locked Pay UGX 5000 PER MONTH</h3><button class="btn btn-pay" onclick="window.open('https://store.pesapal.com/jbplussubscription','_blank')">PAY PESAPAL -MTN/AIRTEL</button><div style="display:flex;gap:6px;width:100%;margin-top:10px"><input id="transId" placeholder=""><button onclick="verifyPayment()" style="background:#fff;color:#000;border:none;padding:13px 18px;border-radius:10px;font-weight:700">OK</button></div></div>
 </div>
-<div class="video-info"><h4 id="" style="margin:0;font-size:13px">JB PODCAST OFFICIAL APP</h4><span id="liveBadge" class="badge-locked">LOCKED</span></div>
-<div class="admin-only"><div class="admin-panel"><p style="font-size:11px;color:#ff0066;font-weight:800;margin:0 0 8px 0">🎛 CONTROL CENTRE - ADMIN ONLY</p><div style="display:flex;gap:6px"><button id="btnMy" onclick="adminSet('my')">📡 MY LIVE</button><button id="btnFiller" class="active" onclick="adminSet('filler')">🎵 TRACE ROTATE</button></div><p id="adminNote" style="font-size:9px;color:#00e5ff;margin-top:8px"></p><p style="font-size:8px;color:#666">Videos auto 40 mins, Galaxy FM manual</p></div></div>
+<div class="video-info"><h4 id="" style="margin:0;font-size:13px">JB PODCAST OFFICIAL APP</h4><span id="" class="badge-locked">IN STUDios</span></div>
+<div class="admin-only"><div class="admin-panel"><p style="font-size:11px;color:#ff0066;font-weight:800;margin:0 0 8px 0">🎛 CONTROL</p><div style="display:flex;gap:6px"><button onclick="adminSet('my')">📡 MY LIVE</button><button onclick="adminSet('filler')">🎵 TRACE</button></div><p id="adminNote" style="font-size:9px;color:#00e5ff;margin-top:8px"></p></div></div>
 </div>
-
 <div class="radio-card">
-<h3 style="margin:0">● JB RADIO LIVE</h3>
-<audio id="radioAudio" autoplay playsinline controls style="width:100%;margin-top:12px;display:none"></audio>
-<button class="btn" style="border:2px solid #8b5cf6;background:#1a1a3a;color:#fff;margin-top:12px" onclick="startListening()" id="listenBtn">▶ LISTEN JB RADIO LIVE NOW</button>
-<p style="text-align:center;font-size:11px;color:#888;margin:6px 0" id="rStat">Tap to connect</p>
-<div class="admin-only"><button onclick="startBroadcast()" id="sBtn" style="width:100%;padding:12px;border-radius:10px;background:linear-gradient(90deg,#00c853,#00e676);color:#fff;border:none;font-weight:700">🟢 START RADIO STUDIO</button><button onclick="stopBroadcast()" id="eBtn" style="display:none;width:100%;padding:12px;border-radius:10px;background:#ff3b30;color:#fff;border:none">🔴 STOP RADIO</button><p id="hostStat" style="font-size:10px;color:#00e676;text-align:center;margin-top:6px"></p></div>
+<h3 style="margin:0">● JB RADIO - Channel: </h3>
+<button class="btn" style="border:2px solid #00e676;background:#0a1a14;color:#fff;margin-top:12px" onclick="startListening()" id="listenBtn">▶ LISTEN JB RADIO LIVE NOW</button>
+<p style="text-align:center;font-size:11px;color:#888;margin:6px 0" id="rStat">Channel JBLIVE ready</p>
+<div class="admin-only"><button onclick="startBroadcast()" id="sBtn" style="width:100%;padding:12px;border-radius:10px;background:linear-gradient(90deg,#00c853,#00e676);color:#fff;border:none;font-weight:700">🟢 START RADIO STUDIO - JBLIVE</button><button onclick="stopBroadcast()" id="eBtn" style="display:none;width:100%;padding:12px;border-radius:10px;background:#ff3b30;color:#fff;border:none">🔴 STOP RADIO</button><p id="hostStat" style="font-size:10px;color:#00e676;text-align:center;margin-top:6px"></p></div>
 </div>
-
-<div style="display:flex;justify-content:space-between;align-items:center;margin:20px 0 12px 0"><h3 style="margin:0">📺 Latest Episodes</h3><div style="display:flex;gap:6px"><span id="epCount" style="background:#1a1a2e;color:#8b5cf6;padding:4px 10px;border-radius:12px;font-size:11px">0</span><button onclick="loadVids()" style="background:#1a1a2e;border:1px solid #2a2a40;color:#fff;padding:4px 8px;border-radius:8px;font-size:10px">↻</button></div></div>
-<div class="grid" id="videoList"><p style="font-size:11px;color:#555">Loading latest YouTube videos...</p></div>
-
+<div class="grid" id="videoList"></div>
 <script>
 const MY_CHANNEL="UCko2JV1XdHAV50BkPmu3bmg";
 const ADMIN_CODE="7788"; const USER_CODE="1010";
-const RADIO_ID="jb-plus-radio-ug-v30";
+const AGORA_APP_ID="c3ef1f48e3d4481f823652d818481c12";
+const AGORA_TOKEN="007eJxTYLARnjWppEReS5XhjO/K2Qp8sveXKvpc1JQ+9HtJ6rIg50kKDMnGqWmGaSYWqcYpJiYWhmkWRsZmpkYpFoYWQF6yodH/57OyGgIZGTwX1rIyMkAgiM/G4OXk4xnmysAAAKsrHUw=";
+const RADIO_CHANNEL="JBLIVE";
 const GALAXY_FM_URL="https://stream.zeno.fm/2t6prb0kba8uv";
 const FILLER_LIST=["2x6CwsqUssI","s952nOxjMR0","jfKfPfyJRdk","AUDIO_GALAXY","lTRiuFIWV54"];
-
 let fillerPos=parseInt(localStorage.getItem('jb_filler_pos')||'0');
 let isPaid=localStorage.getItem('jb_live_paid')==='yes', isAdmin=localStorage.getItem('jb_is_admin')==='yes', tap=0,lt=0,ytPlayer;
 let adminChoice=localStorage.getItem('jb_admin_feed')||'filler';
-let hostPeer=null, clientPeer=null, localStream=null;
-
-document.getElementById('secretTap').addEventListener('click',()=>{let n=Date.now(); if(n-lt>3000)tap=0; tap++; lt=n; if(tap>=5){tap=0; let p=prompt('Admin Code:'); if(p===ADMIN_CODE){isAdmin=true; localStorage.setItem('jb_is_admin','yes'); showAdmin(); alert('Admin ON');}}});
+let agoraClient=null, localTrack=null;
+document.getElementById('secretTap').addEventListener('click',()=>{let n=Date.now(); if(n-lt>3000)tap=0; tap++; lt=n; if(tap>=5){tap=0; let p=prompt('Admin Code:'); if(p===ADMIN_CODE){isAdmin=true; localStorage.setItem('jb_is_admin','yes'); location.reload();}}});
 function showAdmin(){let s=document.createElement('style'); s.innerHTML='.admin-only{display:block!important}'; document.head.appendChild(s);}
 if(isAdmin) showAdmin();
-
 function verifyPayment(){let t=document.getElementById('transId').value.trim(); if(t===ADMIN_CODE){localStorage.setItem('jb_live_paid','yes'); localStorage.setItem('jb_is_admin','yes'); location.reload(); return;} if(t===USER_CODE || t.length>=4){localStorage.setItem('jb_live_paid','yes'); location.reload(); return;} alert('Invalid');}
 function checkLock(){let o=document.getElementById('lockOverlay'); if(isPaid){o.style.display='none'; document.getElementById('liveBadge').innerText='● LIVE'; document.getElementById('liveBadge').className='badge-live'; document.getElementById('liveTitle').innerText='JB PLUS LIVE'; if(window.YT&&YT.Player) initYT();} else{o.style.display='flex';} loadVids();}
 checkLock();
-
-function initYT(){
- let item=FILLER_LIST[fillerPos%FILLER_LIST.length];
- let isAudio=(item==="AUDIO_GALAXY");
- let isLive=(adminChoice==='my');
- let ytDiv=document.getElementById('ytLive'); let audioEl=document.getElementById('fillerAudio'); let label=document.getElementById('feedLabel');
- if(ytPlayer){try{ytPlayer.destroy();}catch(e){}} clearTimeout(window.rotateTimer);
- if(isLive){
-  ytDiv.style.display='block'; audioEl.style.display='none'; audioEl.pause();
-  ytPlayer=new YT.Player('ytLive',{height:'100%',width:'100%',playerVars:{autoplay:1,controls:0,modestbranding:1,rel:0,showinfo:0,iv_load_policy:3,fs:0,disablekb:1,playsinline:1},events:{onReady:e=>{e.target.loadVideoByUrl({mediaContentUrl:'https://www.youtube.com/embed/live_stream?channel='+MY_CHANNEL}); e.target.setVolume(100);}}});
-  document.getElementById('adminNote').innerText='MY LIVE'; label.innerText='MY LIVE';
- } else if(isAudio){
-  ytDiv.style.display='none'; if(ytPlayer){try{ytPlayer.destroy();}catch(e){}}
-  audioEl.style.display='block'; audioEl.src=GALAXY_FM_URL; audioEl.play().catch(()=>{});
-  document.getElementById('adminNote').innerText='GALAXY FM 100.2 LIVE - No auto rotate - tap TRACE ROTATE to change'; label.innerText='GALAXY FM 100.2 MANUAL';
- } else {
-  ytDiv.style.display='block'; audioEl.style.display='none'; audioEl.pause();
-  ytPlayer=new YT.Player('ytLive',{height:'100%',width:'100%',videoId:item,playerVars:{autoplay:1,controls:0,modestbranding:1,rel:0,loop:1,playlist:item,showinfo:0,iv_load_policy:3,fs:0,disablekb:1,playsinline:1,mute:0},events:{onReady:e=>{e.target.setVolume(100);e.target.playVideo();}}});
-  let name=item==="2x6CwsqUssI"?"UGANDAN NONSTOP":item==="s952nOxjMR0"?"AMAPIANO NONSTOP":"AFRICAN MIX";
-  document.getElementById('adminNote').innerText='TRACE #'+(fillerPos+1)+'/5: '+name+' - Auto 40 mins'; label.innerText=name;
-  window.rotateTimer=setTimeout(()=>{if(adminChoice==='filler'){fillerPos=(fillerPos+1)%FILLER_LIST.length; localStorage.setItem('jb_filler_pos',fillerPos); initYT();}}, 40*60*1000);
- }
-}
+function initYT(){let item=FILLER_LIST[fillerPos%FILLER_LIST.length]; let isAudio=(item==="AUDIO_GALAXY"); let isLive=(adminChoice==='my'); let ytDiv=document.getElementById('ytLive'); let audioEl=document.getElementById('fillerAudio'); let label=document.getElementById('feedLabel'); if(ytPlayer){try{ytPlayer.destroy();}catch(e){}} clearTimeout(window.rotateTimer); if(isLive){ytDiv.style.display='block'; audioEl.style.display='none'; audioEl.pause(); ytPlayer=new YT.Player('ytLive',{height:'100%',width:'100%',playerVars:{autoplay:1,controls:0,modestbranding:1,rel:0,showinfo:0,iv_load_policy:3,fs:0,disablekb:1,playsinline:1},events:{onReady:e=>{e.target.loadVideoByUrl({mediaContentUrl:'https://www.youtube.com/embed/live_stream?channel='+MY_CHANNEL});}}});} else if(isAudio){ytDiv.style.display='none'; if(ytPlayer){try{ytPlayer.destroy();}catch(e){}} audioEl.style.display='block'; audioEl.src=GALAXY_FM_URL; audioEl.play().catch(()=>{});} else {ytDiv.style.display='block'; audioEl.style.display='none'; audioEl.pause(); ytPlayer=new YT.Player('ytLive',{height:'100%',width:'100%',videoId:item,playerVars:{autoplay:1,controls:0,modestbranding:1,rel:0,loop:1,playlist:item},events:{onReady:e=>{e.target.playVideo();}}}); window.rotateTimer=setTimeout(()=>{if(adminChoice==='filler'){fillerPos=(fillerPos+1)%FILLER_LIST.length; localStorage.setItem('jb_filler_pos',fillerPos); initYT();}}, 40*60*1000);}}
 function adminSet(t){if(t==='my'){adminChoice='my';} else {if(adminChoice==='filler'){fillerPos=(fillerPos+1)%FILLER_LIST.length;} adminChoice='filler';} localStorage.setItem('jb_admin_feed',adminChoice); localStorage.setItem('jb_filler_pos',fillerPos); initYT();}
 function onYouTubeIframeAPIReady(){if(isPaid) initYT();}
-
-// RADIO - FIXED NO 0:00 BUG
-function startBroadcast(){
- document.getElementById('hostStat').innerText='Requesting mic...';
- document.getElementById('rStat').innerText='● Starting radio...';
- if(clientPeer){try{clientPeer.destroy();}catch(e){} clientPeer=null;}
- if(hostPeer){try{hostPeer.destroy();}catch(e){} hostPeer=null;}
- navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false, autoGainControl:true, noiseSuppression:false}}).then(s=>{
-  localStream=s; s.getAudioTracks().forEach(t=>t.enabled=true);
-  hostPeer=new Peer(RADIO_ID,{config:{iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"},{urls:"stun:stun2.l.google.com:19302"}]}});
-  hostPeer.on('open',()=>{document.getElementById('rStat').innerText='● RADIO LIVE ON AIR'; document.getElementById('hostStat').innerText='✅ LIVE - Talk now, listeners will hear you'; document.getElementById('sBtn').style.display='none'; document.getElementById('eBtn').style.display='block';});
-  hostPeer.on('call',call=>{call.answer(s);});
-  hostPeer.on('error',e=>{if(e.type==='unavailable-id'){document.getElementById('hostStat').innerText='ID taken, retry...'; setTimeout(()=>{hostPeer.destroy(); startBroadcast();},1500);}});
- }).catch(e=>{alert('Allow mic: '+e.message);});
+async function startBroadcast(){
+ document.getElementById('hostStat').innerText='Joining JBLIVE...';
+ document.getElementById('rStat').innerText='● Starting JBLIVE...';
+ if(agoraClient){try{await agoraClient.leave();}catch(e){}}
+ agoraClient = AgoraRTC.createClient({mode:"live", codec:"vp8"});
+ agoraClient.setClientRole("host");
+ try{
+  await agoraClient.join(AGORA_APP_ID, RADIO_CHANNEL, AGORA_TOKEN, "host-"+Date.now());
+  localTrack = await AgoraRTC.createMicrophoneAudioTrack();
+  await agoraClient.publish([localTrack]);
+  document.getElementById('rStat').innerText='● LIVE ON JBLIVE CHANNEL 🎙️';
+  document.getElementById('hostStat').innerText='✅ LIVE on JBLIVE - Talk now';
+  document.getElementById('sBtn').style.display='none'; document.getElementById('eBtn').style.display='block';
+ }catch(e){document.getElementById('hostStat').innerText='Error: '+e.message; console.log(e);}
 }
-function stopBroadcast(){if(hostPeer) hostPeer.destroy(); hostPeer=null; if(localStream) localStream.getTracks().forEach(t=>t.stop()); document.getElementById('sBtn').style.display='block'; document.getElementById('eBtn').style.display='none'; document.getElementById('hostStat').innerText='Stopped'; document.getElementById('rStat').innerText='● Offline';}
-function startListening(){
- const audio=document.getElementById('radioAudio'); audio.style.display='block'; audio.muted=false; audio.volume=1.0; audio.controls=true;
- document.getElementById('rStat').innerText='● Connecting to host...'; document.getElementById('listenBtn').innerText='⏳ CONNECTING...';
- if(hostPeer){try{hostPeer.destroy();}catch(e){} hostPeer=null;}
- if(clientPeer){try{clientPeer.destroy();}catch(e){} clientPeer=null;}
- clientPeer=new Peer({config:{iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"}]}});
- clientPeer.on('open',()=>{
-  let call=clientPeer.call(RADIO_ID, new MediaStream());
-  let connected=false;
-  if(!call){document.getElementById('rStat').innerText='● Host offline - Start studio first'; document.getElementById('listenBtn').innerText='▶ LISTEN JB RADIO LIVE NOW'; return;}
-  call.on('stream',rs=>{connected=true; audio.srcObject=rs; setTimeout(()=>{audio.play().then(()=>{document.getElementById('rStat').innerText='● LISTENING LIVE 🎧'; document.getElementById('listenBtn').innerText='🔊 LISTENING';}).catch(()=>{document.getElementById('rStat').innerText='● Tap play on audio bar 🔊';});},500);});
-  call.on('close',()=>{if(!connected){document.getElementById('rStat').innerText='● Host offline'; document.getElementById('listenBtn').innerText='▶ TRY AGAIN';}});
-  call.on('error',()=>{document.getElementById('rStat').innerText='● Host offline'; document.getElementById('listenBtn').innerText='▶ LISTEN JB RADIO LIVE NOW';});
-  setTimeout(()=>{if(!connected){document.getElementById('rStat').innerText='● Host offline - Make sure studio shows ✅ LIVE'; document.getElementById('listenBtn').innerText='▶ TRY AGAIN';}},8000);
- });
+async function stopBroadcast(){if(localTrack){localTrack.stop(); localTrack.close();} if(agoraClient){await agoraClient.leave();} document.getElementById('sBtn').style.display='block'; document.getElementById('eBtn').style.display='none'; document.getElementById('hostStat').innerText='Stopped';}
+async function startListening(){
+ document.getElementById('rStat').innerText='● Joining JBLIVE...'; document.getElementById('listenBtn').innerText='⏳ CONNECTING...';
+ if(agoraClient){try{await agoraClient.leave();}catch(e){}}
+ agoraClient = AgoraRTC.createClient({mode:"live", codec:"vp8"});
+ agoraClient.setClientRole("audience");
+ agoraClient.on("user-published", async (user, mediaType)=>{ await agoraClient.subscribe(user, mediaType); if(mediaType==="audio"){user.audioTrack.play(); document.getElementById('rStat').innerText='● LISTENING JBLIVE 🎧'; document.getElementById('listenBtn').innerText='🔊 LIVE ON JBLIVE';}});
+ try{ await agoraClient.join(AGORA_APP_ID, RADIO_CHANNEL, AGORA_TOKEN, "listener-"+Date.now()); document.getElementById('rStat').innerText='● Connected to JBLIVE - Waiting for host...'; setTimeout(()=>{if(document.getElementById('rStat').innerText.includes('Waiting')){document.getElementById('rStat').innerText='● Host offline - Start studio'; document.getElementById('listenBtn').innerText='▶ TRY AGAIN';}},8000);}catch(e){document.getElementById('rStat').innerText='Token error: '+e.message;}
 }
-
-async function loadVids(){try{let r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id='+MY_CHANNEL)); let d=await r.json(); if(!d.items){document.getElementById('videoList').innerHTML='No videos'; return;} document.getElementById('epCount').innerText=d.items.length; let h=''; d.items.forEach((v,i)=>{let id=v.link.split('v=')[1]; let th='https://i.ytimg.com/vi/'+id+'/hqdefault.jpg'; let t=v.title.slice(0,32); let lock=!isPaid&&i>=2; h+=lock?`<div class="ep-card"><img src="${th}"><p>🔒 ${t}</p></div>`:`<div class="ep-card" onclick="playEp('${id}')"><img src="${th}"><p>▶ ${t}</p></div>`;}); document.getElementById('videoList').innerHTML=h;}catch(e){document.getElementById('videoList').innerHTML='Tap ↻';}}
-function playEp(id){if(!isPaid)return; if(ytPlayer) ytPlayer.loadVideoById(id); window.scrollTo({top:0,behavior:'smooth'});}
+async function loadVids(){try{let r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id='+MY_CHANNEL)); let d=await r.json(); if(!d.items)return; let h=''; d.items.forEach((v,i)=>{let id=v.link.split('v=')[1]; let th='https://i.ytimg.com/vi/'+id+'/hqdefault.jpg'; let t=v.title.slice(0,32); let lock=!isPaid&&i>=2; h+=lock?`<div class="ep-card"><img src="${th}"><p>🔒 ${t}</p></div>`:`<div class="ep-card" onclick="playEp('${id}')"><img src="${th}"><p>▶ ${t}</p></div>`;}); document.getElementById('videoList').innerHTML=h;}catch(e){}}
+function playEp(id){if(!isPaid)return; if(ytPlayer) ytPlayer.loadVideoById(id);}
 </script>
 </body>
-  </html>
+ </html>
