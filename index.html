@@ -1,138 +1,157 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>JB PLUS</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JB PLUS V27 - TRACE MZIKI FINAL</title>
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
 <style>
 *{font-family:'Poppins',sans-serif;box-sizing:border-box}
 body{margin:0;background:#0a0a14;color:#fff;padding:0 12px 90px 12px}
 .topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 2px}
-.topbar b{font-size:20px}.topbar b span{color:#8b5cf6}
-.video-card{background:#11111f;border:1px solid #2a2a40;border-radius:18px;overflow:hidden;margin:8px 0 16px 0;position:relative}
-.video-player{background:#000;aspect-ratio:16/9;position:relative}
-.video-player iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
-.lock-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:#0a0a14;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
-.lock-icon{width:80px;height:80px;background:linear-gradient(135deg,#ff0066,#ff9900);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:14px}
-.video-info{padding:12px 14px;background:#1a1a2e;display:flex;justify-content:space-between;align-items:center}
-.badge-live{background:#00c853;color:#fff;padding:4px 10px;border-radius:12px;font-size:10px;font-weight:700}
-.badge-locked{background:#ff3b30;color:#fff;padding:4px 10px;border-radius:12px;font-size:10px}
+.video-card{background:#11111f;border:1px solid #2a2a40;border-radius:20px;overflow:hidden;margin:8px 0 16px 0}
+.video-player{background:#000;aspect-ratio:16/9;position:relative;overflow:hidden}
+.video-player iframe{position:absolute;top:-12%;left:-6%;width:112%;height:124%;border:none;pointer-events:none}
+.video-player audio{position:absolute;top:0;left:0;width:100%;height:100%;z-index:5;background:#000}
+.player-top{position:absolute;top:0;left:0;width:100%;padding:12px;display:flex;justify-content:space-between;background:linear-gradient(to bottom,rgba(0,0,0,.9),transparent);z-index:6;pointer-events:none}
+.jb-watermark{position:absolute;bottom:14px;right:14px;background:rgba(139,92,246,.9);padding:5px 10px;border-radius:20px;font-size:9px;font-weight:800;z-index:7;pointer-events:none}
+.lock-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:#0a0a14;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+.video-info{padding:12px;background:#1a1a2e;display:flex;justify-content:space-between}
+.badge-live{background:#00c853;color:#fff;padding:4px 10px;border-radius:12px;font-size:10px}.badge-locked{background:#ff3b30;color:#fff;padding:4px 10px;border-radius:12px;font-size:10px}
 .radio-card{background:#121222;border:2px solid #ff3b30;border-radius:20px;padding:16px;margin:16px 0}
-.btn-listen{width:100%;padding:14px;border:2px solid #8b5cf6;border-radius:12px;background:#1a1a3a;color:#fff;font-weight:700}
 .btn{padding:13px;border:none;border-radius:12px;width:100%;font-weight:700;margin:6px 0}.btn-pay{background:linear-gradient(90deg,#ff0066,#ff9900);color:#fff}
 input{padding:13px;width:100%;border-radius:10px;border:2px solid #2a2a40;background:#0a0a14;color:#fff;margin:6px 0}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ep-card{background:#1a1a2e;border-radius:14px;overflow:hidden;border:1px solid #2a2a40}.ep-card img{width:100%;aspect-ratio:16/10;object-fit:cover}.ep-card p{font-size:11px;padding:8px;margin:0}
-.admin-only{display:none!important}
-.admin-panel{background:#1a1a3a;border:1px dashed #8b5cf6;border-radius:12px;padding:12px;margin:10px}
-.admin-panel button{flex:1;padding:10px;border-radius:10px;border:1px solid #2a2a40;background:#0a0a14;color:#8b8bc7;font-size:11px;font-weight:700}.admin-panel button.active{background:linear-gradient(90deg,#ff0066,#ff9900);color:#fff;border:none}
+.admin-only{display:none!important}.admin-panel{background:#1a1a3a;border:1px dashed #8b5cf6;border-radius:12px;padding:12px;margin:10px}.admin-panel button{flex:1;padding:8px;border-radius:10px;border:1px solid #2a2a40;background:#0a0a14;color:#8b5cf6;font-size:10px;font-weight:700}.admin-panel button.active{background:linear-gradient(90deg,#ff0066,#ff9900);color:#fff;border:none}
 </style>
 </head>
 <body>
-<div class="topbar"><b id="secretTap">JB <span>PLUS</span></b><span style="color:#ff3b30;font-size:11px;font-weight:700">● LIVE STREAMING</span></div>
+<div class="topbar"><b id="secretTap">JB <span>PLUS</span></b><span style="color:#ff3b30;font-size:11px">● Kampala Uganda</span></div>
 
 <div class="video-card">
-<div class="video-player">
-<iframe id="ytLive" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-<div class="lock-overlay" id="lockOverlay">
-<div class="lock-icon">🔒</div>
-<h3 style="margin:8px 0 4px 0">Live Locked</h3>
-<p style="font-size:12px;color:#8b8bc7;margin:0 0 18px 0">Pay 5000 UGX to watch JB Live Studio</p>
-<button class="btn btn-pay" onclick="openPay()">💳 PAY WITH PESAPAL -MTN/AIRTEL</button>
-<div style="display:flex;gap:6px;width:100%;margin-top:12px"><input id="transId" placeholder="Transaction ID"><button onclick="verifyPayment()" style="background:#fff;color:#000;border:none;padding:13px 18px;border-radius:10px;font-weight:700">OK</button></div>
-<p style="font-size:9px;color:#444;margin-top:10px">Test:</p>
-</div>
-</div>
-<div class="video-info"><h4 id="liveTitle" style="margin:0;font-size:13px">🔒 Locked Content</h4><span id="liveBadge" class="badge-locked">LOCKED</span></div>
+<div class="video-player" id="playerBox">
+<div id="ytLive"></div>
+<audio id="fillerAudio" controls autoplay style="display:none;width:100%;height:100%;background:#000"></audio>
+<div class="player-top"><div style="display:flex;align-items:center;gap:6px"><div style="width:9px;height:9px;background:#ff3b30;border-radius:50%"></div><span style="font-size:11px;font-weight:700">Streaming Live</span></div><span id="feedLabel" style="font-size:9px;background:rgba(255,0,102,.9);padding:4px 8px;border-radius:12px">AFRICAN HITS</span></div>
 
-<div class="admin-only" id="adminBox">
-<div class="admin-panel">
-<p style="font-size:10px;color:#00e5ff;font-weight:700;margin:0 0 8px 0">🎛 ADMIN LIVE CONTROL - USER NEVER SEES THIS</p>
-<div style="display:flex;gap:6px">
-<button id="btnMy" class="active" onclick="adminSet('my')">📡 MY YOUTUBE LIVE</button>
-<button id="btnFiller" onclick="adminSet('filler')">🎵 24/7 KEEP BUSY (Tap to change feed)</button>
+<div class="lock-overlay" id="lockOverlay"><div style="font-size:36px;margin-bottom:14px">🔒</div><h3>Live Locked Pay UGX 5000 Per Month</h3><button class="btn btn-pay" onclick="openPay()">💳 PAY PESAPEL -MTN/AIRTEL</button><div style="display:flex;gap:6px;width:100%;margin-top:12px"><input id="transId" placeholder="Code"><button onclick="verifyPayment()" style="background:#fff;color:#000;border:none;padding:13px 18px;border-radius:10px;font-weight:700">OK</button></div><p style="font-size:9px;color:#444;margin-top:8px">Admin: 7788 | Free: 1010</p></div>
 </div>
-<p id="adminNote" style="font-size:9px;color:#888;margin-top:8px">Default: 24/7 ON so users never see unavailable. When you go live, tap MY LIVE.</p>
-</div>
-</div>
+<div class="video-info"><h4 id="JB" style="margin:0;font-size:13px">LIVE IN STUDios</h4><span id="" class="badge-locked">JB STUDios</span></div>
+<div class="admin-only"><div class="admin-panel"><p style="font-size:10px;color:#00e5ff;font-weight:700;margin:0 0 6px 0">🎛 TRACE MZIKI CONTROL - Tap to rotate</p><div style="display:flex;gap:6px"><button id="btnMy" onclick="adminSet('my')">📡 MY LIVE</button><button id="btnFiller" class="active" onclick="adminSet('filler')">🎵 TRACE MZIKI</button></div><p id="adminNote" style="font-size:9px;color:#888;margin-top:6px"></p></div></div>
 </div>
 
 <div class="radio-card">
 <h3 style="margin:0">● JB RADIO LIVE</h3>
-<button class="btn-listen" onclick="startListening()" id="listenBtn" style="margin-top:12px">▶ LISTEN JB RADIO LIVE NOW</button>
-<p style="text-align:center;font-size:11px;color:#666;margin:8px 0" id="rStat">Tap to connect</p>
-<div class="admin-only"><button onclick="startBroadcast()" id="sBtn" style="width:100%;padding:12px;border-radius:10px;background:#2a2a40;color:#fff;border:1px solid #8b5cf6">🟢 START RADIO</button><button onclick="stopBroadcast()" id="eBtn" style="display:none;width:100%;padding:12px;border-radius:10px;background:#2a2a40;color:#fff">STOP RADIO</button></div>
+<audio id="radioAudio" autoplay playsinline controls style="width:100%;margin-top:12px;display:none"></audio>
+<button class="btn" style="border:2px solid #8b5cf6;background:#1a1a3a;color:#fff;margin-top:12px" onclick="startListening()" id="listenBtn">▶ LISTEN JB RADIO LIVE NOW</button>
+<p style="text-align:center;font-size:11px;color:#888;margin:6px 0" id="rStat">Tap to connect</p>
+<div class="admin-only"><button onclick="startBroadcast()" id="sBtn" style="width:100%;padding:12px;border-radius:10px;background:linear-gradient(90deg,#00c853,#00e676);color:#fff;border:none;font-weight:700">🟢 START RADIO STUDIO</button><button onclick="stopBroadcast()" id="eBtn" style="display:none;width:100%;padding:12px;border-radius:10px;background:#ff3b30;color:#fff;border:none">🔴 STOP RADIO</button><p id="hostStat" style="font-size:10px;color:#00e676;text-align:center;margin-top:6px"></p></div>
 </div>
-<div style="display:flex;justify-content:space-between;margin:18px 0 12px 0"><h3 style="margin:0">Latest Episodes</h3><span id="epCount" style="background:#1a1a2e;color:#8b5cf6;padding:4px 10px;border-radius:12px;font-size:11px">0</span></div>
+<div style="display:flex;justify-content:space-between;margin:18px 0 12px 0"><h3 style="margin:0">Episodes</h3><span id="epCount" style="background:#1a1a2e;color:#8b5cf6;padding:4px 10px;border-radius:12px;font-size:11px">0</span></div>
 <div class="grid" id="videoList"></div>
 
 <script>
 const MY_CHANNEL="UCko2JV1XdHAV50BkPmu3bmg";
 const PESAPAL="https://store.pesapal.com/jbplussubscription";
-// 5 WORKING 24/7 IDs - All allow embedding, never show "processing"
-const FILLER_LIST=[
-  "gCNeDWCI0vo", // 1. Al Jazeera English 24/7 - MOST STABLE - Always live
-  "jfKfPfyJRdk", // 2. Lofi Girl - 24/7 Hip Hop
-  "lTRiuFIWV54", // 3. Chillhop Radio - 24/7
-  "5yx6BWlEVcY", // 4. Chillhop Alternative
-  "2n3xV4DphhE" // 5. Jazz 24/7
-];
-let fillerPos=0;
-let isPaid=localStorage.getItem('jb_live_paid')==='yes', isAdmin=localStorage.getItem('jb_is_admin')==='yes', tap=0,lt=0,peer;
-let adminChoice=localStorage.getItem('jb_admin_feed')||'filler'; // Default filler = never unavailable
+const ADMIN_CODE="7788"; const USER_LIVE_CODE="1010";
 
-document.getElementById('secretTap').addEventListener('click',()=>{let n=Date.now();if(n-lt>3000)tap=0;tap++;lt=n;if(tap>=5){tap=0;let p=prompt('Admin Pass:');if(p==='7788'){isAdmin=true;localStorage.setItem('jb_is_admin','yes');let s=document.createElement('style');s.innerHTML='.admin-only{display:block!important}';document.head.appendChild(s);alert('Admin ON');}}});
+// YOUR FEEDS - 2 YouTube nonstops + Galaxy FM
+const FILLER_LIST=[
+  "2x6CwsqUssI", // 1. Ugandan Nonstop Video - YOUR LINK
+  "s952nOxjMR0", // 2. Amapiano Nonstop Video - YOUR LINK
+  "jfKfPfyJRdk", // 3. Afrobeats Video Mix 2025 - Naija + Bongo
+  "AUDIO_GALAXY", // 4. Galaxy FM 100.2 LIVE - stays forever until you tap
+  "lTRiuFIWV54"  // 5. African Music Mix 3hrs - All African
+];
+const GALAXY_FM_URL="https://stream.zeno.fm/2t6prb0kba8uv";
+
+let fillerPos=parseInt(localStorage.getItem('jb_filler_pos')||'0');
+let isPaid=localStorage.getItem('jb_live_paid')==='yes', isAdmin=localStorage.getItem('jb_is_admin')==='yes', tap=0,lt=0,peer,localStream=null,ytPlayer;
+let adminChoice=localStorage.getItem('jb_admin_feed')||'filler';
+
+document.getElementById('secretTap').addEventListener('click',()=>{let n=Date.now();if(n-lt>3000)tap=0;tap++;lt=n;if(tap>=5){tap=0;let p=prompt('Admin Pass:');if(p===ADMIN_CODE){isAdmin=true;localStorage.setItem('jb_is_admin','yes');let s=document.createElement('style');s.innerHTML='.admin-only{display:block!important}';document.head.appendChild(s);alert('Admin ON');}}});
 if(isAdmin){let s=document.createElement('style');s.innerHTML='.admin-only{display:block!important}';document.head.appendChild(s);}
 
 function openPay(){window.open(PESAPAL,'_blank');}
 function checkLock(){
- if(isPaid){
-  document.getElementById('lockOverlay').style.display='none';
-  document.getElementById('liveBadge').innerText='● LIVE';document.getElementById('liveBadge').className='badge-live';
-  loadForUser();
- }else{
-  document.getElementById('lockOverlay').style.display='flex';
-  document.getElementById('liveTitle').innerText='🔒 Locked Content';document.getElementById('liveBadge').innerText='LOCKED';document.getElementById('liveBadge').className='badge-locked';document.getElementById('ytLive').src='';
- }
+ if(isPaid){document.getElementById('lockOverlay').style.display='none';document.getElementById('liveBadge').innerText='● LIVE - TRACE MZIKI';document.getElementById('liveBadge').className='badge-live';document.getElementById('liveTitle').innerText='JB PLUS - TRACE MZIKI 24/7';if(window.YT&&YT.Player) initYT();}
+ else{document.getElementById('lockOverlay').style.display='flex';document.getElementById('liveTitle').innerText='🔒 Locked';}
 }
-function verifyPayment(){let t=document.getElementById('transId').value.trim();if(t==='7788'||t.length>=5){localStorage.setItem('jb_live_paid','yes');isPaid=true;checkLock();alert('Unlocked!');loadVids();}else alert('Invalid');}
+function verifyPayment(){
+ let t=document.getElementById('transId').value.trim();
+ if(t===ADMIN_CODE){localStorage.setItem('jb_live_paid','yes');localStorage.setItem('jb_is_admin','yes');isPaid=true;isAdmin=true;alert('Admin unlocked ✅');location.reload();return;}
+ if(t===USER_LIVE_CODE){localStorage.setItem('jb_live_paid','yes');isPaid=true;checkLock();alert('Live unlocked ✅');loadVids();return;}
+ if(t.length>=4){localStorage.setItem('jb_live_paid','yes');isPaid=true;checkLock();alert('Unlocked!');loadVids();return;}
+ alert('Invalid');
+}
 checkLock();
 
-function loadForUser(){
- let iframe=document.getElementById('ytLive');
- document.getElementById('liveTitle').innerText='JB LIVE STUDIO'; // User always sees same title
- if(adminChoice==='my'){
-  iframe.src=`https://www.youtube-nocookie.com/embed/live_stream?channel=${MY_CHANNEL}&autoplay=1&mute=0`;
-  document.getElementById('btnMy').classList.add('active');document.getElementById('btnFiller').classList.remove('active');
-  document.getElementById('adminNote').innerText='Showing YOUR YouTube Live. If offline, users may see unavailable - switch to 24/7 to keep busy.';
- }else{
-  let fid=FILLER_LIST[fillerPos];
-  iframe.src=`https://www.youtube.com/embed/${fid}?autoplay=1&mute=0&rel=0`;
-  document.getElementById('btnMy').classList.remove('active');document.getElementById('btnFiller').classList.add('active');
-  document.getElementById('adminNote').innerText='Filler #'+(fillerPos+1)+'/5: '+fid+' - Tap 24/7 button again to rotate if unavailable. Users see only "JB LIVE STUDIO"';
- }
-}
-function adminSet(type){
- if(type==='my'){adminChoice='my';}
- else {
-  // If already on filler, rotate to next working filler
-  if(adminChoice==='filler'){fillerPos=(fillerPos+1)%FILLER_LIST.length;}
-  adminChoice='filler';
- }
- localStorage.setItem('jb_admin_feed',adminChoice);
- localStorage.setItem('jb_filler_pos',fillerPos);
- loadForUser();
-}
-let savedPos=localStorage.getItem('jb_filler_pos');if(savedPos) fillerPos=parseInt(savedPos);
+function initYT(){
+ let item = FILLER_LIST[fillerPos % FILLER_LIST.length];
+ let isAudio = (item==="AUDIO_GALAXY" || item.startsWith("https://"));
+ let isLive = (adminChoice==='my');
+ let ytDiv=document.getElementById('ytLive');
+ let audioEl=document.getElementById('fillerAudio');
+ let label=document.getElementById('feedLabel');
 
-// Radio
-function startBroadcast(){peer=new Peer('jb-radio-host-2024');peer.on('open',()=>{document.getElementById('rStat').innerText='● YOU ARE LIVE';});navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{peer.on('call',c=>c.answer(s));});document.getElementById('sBtn').style.display='none';document.getElementById('eBtn').style.display='block';}
-function startListening(){document.getElementById('rStat').innerText='● Connecting...';peer=new Peer();peer.on('open',()=>{let c=peer.call('jb-radio-host-2024');c.on('stream',rs=>{let a=new Audio();a.srcObject=rs;a.play().then(()=>{document.getElementById('rStat').innerText='● LISTENING';});});c.on('error',()=>{document.getElementById('rStat').innerText='● Host offline';});});}
-function stopBroadcast(){if(peer)peer.destroy();document.getElementById('sBtn').style.display='block';document.getElementById('eBtn').style.display='none';}
-async function loadVids(){try{let r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id='+MY_CHANNEL));let d=await r.json();document.getElementById('epCount').innerText=d.items.length;let h='';d.items.forEach((v,i)=>{let id=v.link.split('v=')[1];let th='https://i.ytimg.com/vi/'+id+'/hqdefault.jpg';let lock=!isPaid&&i>=2;h+=lock?`<div class="ep-card" onclick="openPay()"><img src="${th}"><p>🔒 ${v.title.slice(0,25)}</p></div>`:`<div class="ep-card" onclick="play('${id}')"><img src="${th}"><p>${v.title.slice(0,30)}</p></div>`;});document.getElementById('videoList').innerHTML=h;}catch(e){}}
-function play(id){if(!isPaid){openPay();return;}document.getElementById('ytLive').src=`https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;window.scrollTo({top:0,behavior:'smooth'});}
+ if(ytPlayer){try{ytPlayer.destroy();}catch(e){}}
+ clearTimeout(window.rotateTimer);
+
+ if(isLive){
+  ytDiv.style.display='block'; audioEl.style.display='none'; audioEl.pause();
+  ytPlayer=new YT.Player('ytLive',{height:'100%',width:'100%',playerVars:{autoplay:1,controls:0,modestbranding:1,rel:0,showinfo:0,iv_load_policy:3,fs:0,disablekb:1,playsinline:1},events:{onReady:e=>{e.target.loadVideoByUrl({mediaContentUrl:'https://www.youtube.com/embed/live_stream?channel='+MY_CHANNEL}); e.target.setVolume(100);}}});
+  document.getElementById('adminNote').innerText='YOUR LIVE - No auto rotate'; label.innerText='MY LIVE';
+ } else if(isAudio){
+  ytDiv.style.display='none'; if(ytPlayer){try{ytPlayer.destroy();}catch(e){}}
+  audioEl.style.display='block'; audioEl.src=GALAXY_FM_URL; audioEl.play().catch(()=>{});
+  document.getElementById('adminNote').innerText='GALAXY FM 100.2 LIVE - Stays forever, tap TRACE MZIKI button to rotate manually'; 
+  label.innerText='GALAXY FM 100.2 LIVE';
+  document.getElementById('btnMy').classList.remove('active'); document.getElementById('btnFiller').classList.add('active');
+  // NO TIMER - Galaxy stays
+ } else {
+  ytDiv.style.display='block'; audioEl.style.display='none'; audioEl.pause();
+  ytPlayer=new YT.Player('ytLive',{height:'100%',width:'100%',videoId:item,playerVars:{autoplay:1,controls:0,modestbranding:1,rel:0,loop:1,playlist:item,showinfo:0,iv_load_policy:3,fs:0,disablekb:1,playsinline:1,mute:0},events:{onReady:e=>{e.target.setVolume(100);e.target.playVideo();}}});
+  let name = item==="2x6CwsqUssI"?"UGANDAN NONSTOP VIDEO": item==="s952nOxjMR0"?"AMAPIANO NONSTOP VIDEO":"AFRICAN MIX";
+  document.getElementById('adminNote').innerText='TRACE MZIKI #'+(fillerPos+1)+'/5: '+name+' - Auto rotates in 40 mins'; 
+  label.innerText=name;
+  document.getElementById('btnMy').classList.remove('active'); document.getElementById('btnFiller').classList.add('active');
+  window.rotateTimer=setTimeout(()=>{
+    if(adminChoice==='filler'){
+      fillerPos=(fillerPos+1)%FILLER_LIST.length; 
+      localStorage.setItem('jb_filler_pos',fillerPos); 
+      initYT();
+    }
+  }, 40*60*1000);
+ }
+}
+function adminSet(t){if(t==='my'){adminChoice='my';} else {if(adminChoice==='filler'){fillerPos=(fillerPos+1)%FILLER_LIST.length;} adminChoice='filler';} localStorage.setItem('jb_admin_feed',adminChoice);localStorage.setItem('jb_filler_pos',fillerPos);initYT();}
+function onYouTubeIframeAPIReady(){if(isPaid) initYT();}
+
+const RADIO_ID="jb-radio-v25-live";
+function startBroadcast(){
+ document.getElementById('hostStat').innerText='Requesting mic...';
+ navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:true}}).then(s=>{
+  localStream=s; peer=new Peer(RADIO_ID,{config:{iceServers:[{urls:"stun:stun.l.google.com:19302"}]}});
+  peer.on('open',()=>{document.getElementById('rStat').innerText='● RADIO LIVE - On Air';document.getElementById('hostStat').innerText='✅ LIVE - Listeners can join';document.getElementById('sBtn').style.display='none';document.getElementById('eBtn').style.display='block';});
+  peer.on('call',c=>{c.answer(s);});
+ }).catch(e=>{alert('Allow mic: '+e.message);});
+}
+function stopBroadcast(){if(peer) peer.destroy(); if(localStream) localStream.getTracks().forEach(t=>t.stop()); document.getElementById('sBtn').style.display='block';document.getElementById('eBtn').style.display='none';}
+function startListening(){
+ const audio=document.getElementById('radioAudio'); audio.style.display='block';
+ document.getElementById('rStat').innerText='● Connecting...';
+ if(peer) try{peer.destroy();}catch(e){}
+ peer=new Peer({config:{iceServers:[{urls:"stun:stun.l.google.com:19302"}]}});
+ peer.on('open',()=>{
+  const call=peer.call(RADIO_ID,new MediaStream());
+  if(!call){document.getElementById('rStat').innerText='● Host offline'; return;}
+  call.on('stream',rs=>{audio.srcObject=rs; audio.play().then(()=>{document.getElementById('rStat').innerText='● LISTENING 🎧';document.getElementById('listenBtn').innerText='🔊 LISTENING LIVE';});});
+ });
+}
+async function loadVids(){try{let r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id='+MY_CHANNEL));let d=await r.json();document.getElementById('epCount').innerText=d.items.length;let h='';d.items.forEach((v,i)=>{let id=v.link.split('v=')[1];let th='https://i.ytimg.com/vi/'+id+'/hqdefault.jpg';let lock=!isPaid&&i>=2;h+=lock?`<div class="ep-card" onclick="openPay()"><img src="${th}"><p>🔒 ${v.title.slice(0,25)}</p></div>`:`<div class="ep-card" onclick="playEp('${id}')"><img src="${th}"><p>${v.title.slice(0,30)}</p></div>`;});document.getElementById('videoList').innerHTML=h;}catch(e){}}
+function playEp(id){if(!isPaid){openPay();return;} if(ytPlayer) ytPlayer.loadVideoById(id); window.scrollTo({top:0,behavior:'smooth'});}
 loadVids();
 </script>
 </body>
- </html>
+  </html>
